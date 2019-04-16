@@ -1,14 +1,11 @@
 // gameState range 20-29
 
 PImage blast;
-
 PImage DefensePre00;
 PImage DefensePre01;
 PImage DefensePost00;
 PImage defenseScreen01;
-
 PImage defenseBackground;
-
 PImage asteroid01;
 PImage asteroid02;
 PImage asteroid03;

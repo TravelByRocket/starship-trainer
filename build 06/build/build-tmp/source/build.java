@@ -72,7 +72,7 @@ public void settings() {
 	switch(gameMode) {
 		case 0:
 			// size(1008,630,P3D);
-			size(1440,850,P3D);
+			size(1390,850,P3D);
 			break;
 		case 1:
 			fullScreen();
@@ -107,10 +107,7 @@ public void setup() {
 
 public void draw() {
 	background(0); // draw a black backround all the time
-	// inputManager(); // read and handle user inputs
-	// leapInputs();
 
-	// println("gameState: "+gameState);
 	switch(gameState) {
 		case 0: // intro
 			introMain();
@@ -424,14 +421,11 @@ public void loadAttackImages(){
 // gameState range 20-29
 
 PImage blast;
-
 PImage DefensePre00;
 PImage DefensePre01;
 PImage DefensePost00;
 PImage defenseScreen01;
-
 PImage defenseBackground;
-
 PImage asteroid01;
 PImage asteroid02;
 PImage asteroid03;
@@ -463,7 +457,7 @@ public void defenseIntro(){ //gameState 20
 public void defenseTraining(){ // gameState 21
 	// make a circle with your right index finger
 	imageMode(CORNER);
-	image(background,0,0,width,height);
+	image(bgStars,0,0,width,height);
 
 	textSize(18);
 	fill(255);
@@ -1333,10 +1327,8 @@ public void shooterIntro(){ //gameState 30
 	} else {
 		gameState++;
 		scene = 0;
+		startupShooter = true;
 	}
-	
-	startupShooter = true;
-
 }
 
 public void shooterTraining(){ // gameState 31
@@ -1351,8 +1343,6 @@ public void shooterTraining(){ // gameState 31
 
 	leapInputsShooter();
 	
-
-
 	// move left and right
 	rectMode(CORNERS);
 	noStroke();
@@ -1388,9 +1378,6 @@ public void shooterTraining(){ // gameState 31
 		fill(255);
 		textAlign(CENTER,CENTER);
 		text("Press button to fire", width/2, height/2);
-		// if (scene == 0){
-			// scene++;
-		// }
 	} else if (rect1 && rect2 && scene == 1){
 		textSize(18);
 		fill(255);
@@ -1407,14 +1394,9 @@ public void shooterTraining(){ // gameState 31
 	 		missilesPlayer.remove(i); // then remove it from the ArrayList
 	 	}
 	}
-	// press button to fire
-	// press button to play
 
 	player.draw();
 
-
-
-	// gameState++;
 }
 
 public void shooterGame(){ //gameState 32
@@ -1530,7 +1512,6 @@ public void userInputsShooter(){ //better to call userKeysShooter?
 
 public void leapInputsShooter(){
 	leapManager();
-
 	if (commandPositionX < player.posX-width/40){
 		player.floatLeft();
 	} else if (commandPositionX > player.posX+width/40) {
@@ -1540,17 +1521,16 @@ public void leapInputsShooter(){
 }
 
 class Player{
-	// int hitsAllowed = 11;
 	int health = 10;
 	float posX = width/2;
 	float posY = height*0.9f;
 	float leapFloatSpeed = width/80;
 	float keyStepSize = width/30;
 
-	float commandPositionAVG = width/2;
-	float commandPosition00 = width/2;
-	float commandPosition01 = width/2;
-	float commandPosition02 = width/2;
+	// float commandPositionAVG = width/2;
+	// float commandPosition00 = width/2;
+	// float commandPosition01 = width/2;
+	// float commandPosition02 = width/2;
 
 	Player(){
 
@@ -1701,7 +1681,7 @@ public void loadShooterImages(){
 	shooterScreen01 = loadImage("../../data/Galaga Introduction Narrative-01.png");
 	shooterScreen02 = loadImage("../../data/Galaga Instructions 1-01.png");
 	shooterScreen03 = loadImage("../../data/Galaga instructions 2-01.png");
-	ShooterPost00 = loadImage("../../data/ShooterPost00.png");	
+	ShooterPost00 = loadImage("../../data/ShooterPost00.png");
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "build" };

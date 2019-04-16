@@ -54,7 +54,7 @@ void settings() {
 	switch(gameMode) {
 		case 0:
 			// size(1008,630,P3D);
-			size(1440,850,P3D);
+			size(1390,850,P3D);
 			break;
 		case 1:
 			fullScreen();
@@ -89,10 +89,7 @@ void setup() {
 
 void draw() {
 	background(0); // draw a black backround all the time
-	// inputManager(); // read and handle user inputs
-	// leapInputs();
 
-	// println("gameState: "+gameState);
 	switch(gameState) {
 		case 0: // intro
 			introMain();

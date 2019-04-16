@@ -44,10 +44,8 @@ void shooterIntro(){ //gameState 30
 	} else {
 		gameState++;
 		scene = 0;
+		startupShooter = true;
 	}
-	
-	startupShooter = true;
-
 }
 
 void shooterTraining(){ // gameState 31
@@ -62,8 +60,6 @@ void shooterTraining(){ // gameState 31
 
 	leapInputsShooter();
 	
-
-
 	// move left and right
 	rectMode(CORNERS);
 	noStroke();
@@ -99,9 +95,6 @@ void shooterTraining(){ // gameState 31
 		fill(255);
 		textAlign(CENTER,CENTER);
 		text("Press button to fire", width/2, height/2);
-		// if (scene == 0){
-			// scene++;
-		// }
 	} else if (rect1 && rect2 && scene == 1){
 		textSize(18);
 		fill(255);
@@ -118,14 +111,9 @@ void shooterTraining(){ // gameState 31
 	 		missilesPlayer.remove(i); // then remove it from the ArrayList
 	 	}
 	}
-	// press button to fire
-	// press button to play
 
 	player.draw();
 
-
-
-	// gameState++;
 }
 
 void shooterGame(){ //gameState 32
@@ -241,7 +229,6 @@ void userInputsShooter(){ //better to call userKeysShooter?
 
 void leapInputsShooter(){
 	leapManager();
-
 	if (commandPositionX < player.posX-width/40){
 		player.floatLeft();
 	} else if (commandPositionX > player.posX+width/40) {
@@ -251,17 +238,11 @@ void leapInputsShooter(){
 }
 
 class Player{
-	// int hitsAllowed = 11;
 	int health = 10;
 	float posX = width/2;
 	float posY = height*0.9;
 	float leapFloatSpeed = width/80;
 	float keyStepSize = width/30;
-
-	float commandPositionAVG = width/2;
-	float commandPosition00 = width/2;
-	float commandPosition01 = width/2;
-	float commandPosition02 = width/2;
 
 	Player(){
 
@@ -412,5 +393,5 @@ void loadShooterImages(){
 	shooterScreen01 = loadImage("../../data/Galaga Introduction Narrative-01.png");
 	shooterScreen02 = loadImage("../../data/Galaga Instructions 1-01.png");
 	shooterScreen03 = loadImage("../../data/Galaga instructions 2-01.png");
-	ShooterPost00 = loadImage("../../data/ShooterPost00.png");	
+	ShooterPost00 = loadImage("../../data/ShooterPost00.png");
 }

@@ -1,6 +1,5 @@
 // gameState range 10-19
 
-
 PImage rocket;
 PImage spacecraft;
 PImage missionRing;
@@ -9,8 +8,6 @@ PImage shooterLabel;
 PImage attackLabel;
 PImage checkmark;
 PImage asteroid;
-
-
 
 boolean box1 = false;
 boolean box2 = false;
@@ -131,7 +128,6 @@ void menuItemDraw(
 	}
 
 	// DRAW MENU RINGS
-
 	image(missionRing, itemPosX, itemPosY, ringDiamOutside, ringDiamOutside);	
 
 	if(theState){
@@ -158,7 +154,6 @@ void menuItemDraw(
 	}
 	
 	// DRAW SELECTION INDICATOR, DRAW LEVEL NAME, DETERMINE GAMESTATE IF SELECTED
-	// float commandPosition = leapInputsMenu();
 
 	if( // do not draw the selection indicator of the level is completed
 		commandPositionX > thePosition*width/3 // if mouse to the right of the left limit
@@ -189,7 +184,6 @@ void menuItemDraw(
 		}
 	}
 }
-
 
 void userInputsMenu(){
 	if (key == ' ') {
