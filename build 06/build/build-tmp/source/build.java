@@ -28,6 +28,9 @@ public class build extends PApplet {
 // 20190410 -- menu training and shooter training complete
 //**********************************************************************
 
+// Arcade screen dimensions 768x1366 (portrait orientation)
+// aspect ratio of 0.562 or 1.779, which is 16:9
+
 // import LEAP Motion library
 
 LeapMotion leap;
@@ -68,11 +71,14 @@ boolean defenseWin = false;
 boolean shooterWin = false;
 boolean attackWin = false;
 
+
+
 public void settings() {
 	switch(gameMode) {
 		case 0:
 			// size(1008,630,P3D);
-			size(1390,850,P3D);
+			float screenScale = 0.62f;
+			size(PApplet.parseInt(floor(768*screenScale)),PApplet.parseInt(floor(1366*screenScale)),P3D);
 			break;
 		case 1:
 			fullScreen();
@@ -243,13 +249,6 @@ public void keyPressed() {
 	}
 }
 
-public float mapLeapX(float thePosX){
-	return map(thePosX,150,725,0,width);
-}
-
-public float mapLeapY(float thePosY){
-	return map(thePosY,200,450,0,height);
-}
 // gameState range 40-49
 
 PImage AttackPost00;
@@ -901,7 +900,6 @@ public void loadFinaleImages(){
 }
 // gameState range 0-9
 
-
 PImage Intro00;
 PImage Intro01;
 
@@ -1060,8 +1058,25 @@ public void leapManager(){
 	}
 
 }
-// gameState range 10-19
 
+float ratioLeapScreen = 0.4f; // 
+float leapCenteringX = 250;
+float leapCenteringY = 450;
+
+public float mapLeapX(float thePosX){
+	return map(thePosX,
+		leapCenteringX-((width/2)*ratioLeapScreen),
+		leapCenteringX+((width/2)*ratioLeapScreen),
+		0,width);
+}
+
+public float mapLeapY(float thePosY){
+	return map(thePosY,
+		leapCenteringY-((height/2)*ratioLeapScreen),
+		leapCenteringY+((height/2)*ratioLeapScreen),
+		0,height);
+}
+// gameState range 10-19
 
 PImage rocket;
 PImage spacecraft;
@@ -1071,8 +1086,6 @@ PImage shooterLabel;
 PImage attackLabel;
 PImage checkmark;
 PImage asteroid;
-
-
 
 boolean box1 = false;
 boolean box2 = false;
@@ -1193,7 +1206,6 @@ public void menuItemDraw(
 	}
 
 	// DRAW MENU RINGS
-
 	image(missionRing, itemPosX, itemPosY, ringDiamOutside, ringDiamOutside);	
 
 	if(theState){
@@ -1220,7 +1232,6 @@ public void menuItemDraw(
 	}
 	
 	// DRAW SELECTION INDICATOR, DRAW LEVEL NAME, DETERMINE GAMESTATE IF SELECTED
-	// float commandPosition = leapInputsMenu();
 
 	if( // do not draw the selection indicator of the level is completed
 		commandPositionX > thePosition*width/3 // if mouse to the right of the left limit
@@ -1251,7 +1262,6 @@ public void menuItemDraw(
 		}
 	}
 }
-
 
 public void userInputsMenu(){
 	if (key == ' ') {
@@ -1526,11 +1536,6 @@ class Player{
 	float posY = height*0.9f;
 	float leapFloatSpeed = width/80;
 	float keyStepSize = width/30;
-
-	// float commandPositionAVG = width/2;
-	// float commandPosition00 = width/2;
-	// float commandPosition01 = width/2;
-	// float commandPosition02 = width/2;
 
 	Player(){
 

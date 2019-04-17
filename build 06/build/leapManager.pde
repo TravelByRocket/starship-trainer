@@ -126,3 +126,21 @@ void leapManager(){
 	}
 
 }
+
+float ratioLeapScreen = 0.4; // 
+float leapCenteringX = 250;
+float leapCenteringY = 450;
+
+float mapLeapX(float thePosX){
+	return map(thePosX,
+		leapCenteringX-((width/2)*ratioLeapScreen),
+		leapCenteringX+((width/2)*ratioLeapScreen),
+		0,width);
+}
+
+float mapLeapY(float thePosY){
+	return map(thePosY,
+		leapCenteringY-((height/2)*ratioLeapScreen),
+		leapCenteringY+((height/2)*ratioLeapScreen),
+		0,height);
+}

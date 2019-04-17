@@ -10,6 +10,9 @@
 // 20190410 -- menu training and shooter training complete
 //**********************************************************************
 
+// Arcade screen dimensions 768x1366 (portrait orientation)
+// aspect ratio of 0.562 or 1.779, which is 16:9
+
 // import LEAP Motion library
 import de.voidplus.leapmotion.*;
 LeapMotion leap;
@@ -50,11 +53,14 @@ boolean defenseWin = false;
 boolean shooterWin = false;
 boolean attackWin = false;
 
+
+
 void settings() {
 	switch(gameMode) {
 		case 0:
 			// size(1008,630,P3D);
-			size(1390,850,P3D);
+			float screenScale = 0.62;
+			size(int(floor(768*screenScale)),int(floor(1366*screenScale)),P3D);
 			break;
 		case 1:
 			fullScreen();
@@ -225,10 +231,3 @@ void keyPressed() {
 	}
 }
 
-float mapLeapX(float thePosX){
-	return map(thePosX,150,725,0,width);
-}
-
-float mapLeapY(float thePosY){
-	return map(thePosY,200,450,0,height);
-}
