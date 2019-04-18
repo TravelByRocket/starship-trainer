@@ -1,10 +1,12 @@
 // gameState range 20-29
 
 PImage blast;
-PImage DefensePre00;
-PImage DefensePre01;
-PImage DefensePost00;
-PImage defenseScreen01;
+PImage defensePre00;
+PImage defensePre01;
+PImage defensePre02;
+PImage defensePre03;
+PImage defensePost00;
+
 PImage defenseBackground;
 PImage asteroid01;
 PImage asteroid02;
@@ -20,14 +22,17 @@ void defenseIntro(){ //gameState 20
 	
 	startupDefense = true;
 
-	if (scene == 0) {
-		tint(255);
-		imageMode(CORNER);
-		image(DefensePre00,0,0,width,height);
+	tint(255);
+	imageMode(CORNER);
+	
+	if (scene == 0) {	
+		image(defensePre00,0,0,width,height);
 	} else if (scene == 1) {
-		tint(255);
-		imageMode(CORNER);
-		image(DefensePre01,0,0,width,height);
+		image(defensePre01,0,0,width,height);
+	} else if (scene == 2) {
+		image(defensePre02,0,0,width,height);
+	} else if (scene == 3) {
+		image(defensePre03,0,0,width,height);
 	} else {
 		gameState++;
 		scene = 0;
@@ -133,7 +138,7 @@ void defenseGame(){ //gameState 22
 }
 
 void defenseStory(){ //gameState 23
-	image(DefensePost00,0,0,height,width);
+	image(defensePost00,0,0,height,width);
 	defenseWin = true;
 	miniGameWin();
 
@@ -386,10 +391,13 @@ void loadDefenseImages(){
 	asteroid01 = loadImage("../../data/asteroid01.png");
 	asteroid02 = loadImage("../../data/asteroid02.png");
 	asteroid03 = loadImage("../../data/asteroid03.png");
-	DefensePre00 = loadImage("../../data/DefensePre00.png");
-	DefensePre01 = loadImage("../../data/DefensePre01.png");
-	DefensePost00 = loadImage("../../data/DefensePost00.png");
-	defenseScreen01 = loadImage("../../data/Planet defense instructions 1-01.png");
+
+	defensePre00 = loadImage("../../data/defensePre00.png");
+	defensePre01 = loadImage("../../data/defensePre01.png");
+	defensePre02 = loadImage("../../data/defensePre02.png");
+	defensePre03 = loadImage("../../data/defensePre03.png");
+	defensePost00 = loadImage("../../data/defensePost00.png");
+
 	defenseBackground = loadImage("../../data/Planet Defense Blank Screen-01.png");
 	blast = loadImage("../../data/playerBlast.png");
 }

@@ -1,6 +1,6 @@
 // gameState range 40-49
 
-PImage AttackPost00;
+PImage attackPost00;
 
 boolean circs1 = false;
 boolean circs2 = false;
@@ -164,5 +164,5 @@ void leapInputsAttack(){ //better to call userLeapShooter?
 }
 
 void loadAttackImages(){
-	AttackPost00 = loadImage("../../data/AttackPost00.png");
+	attackPost00 = loadImage("../../data/attackPost00.png");
 }

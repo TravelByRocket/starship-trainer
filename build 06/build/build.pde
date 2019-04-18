@@ -20,7 +20,7 @@ LeapMotion leap;
 // CHOOSE GAME DISPLAY MODE (select/deselect with comments)
 int gameMode = 0; // window, 1 screen
 // int gameMode = 1; // fullscreen, 1 screen
-// int gameMode = 2; // 1 screen, window, testing
+// int gameMode = 2; // window, 1 screen, external monitor
 // int gameMode = 3; // 2 screen, span
 
 // DISPLAY DEBUGGING VISUAL GUIDES (select/deselect with comments)

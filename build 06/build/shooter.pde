@@ -16,9 +16,11 @@ PImage fighterFire;
 PImage enemy;
 PImage enemyFire;
 
-PImage shooterScreen01;
-PImage shooterScreen02;
-PImage shooterScreen03;
+PImage shooterPre00;
+PImage shooterPre01;
+PImage shooterPre02;
+PImage shooterPre03;
+PImage shooterPost00;
 
 PImage ShooterPost00;
 
@@ -36,11 +38,13 @@ void shooterIntro(){ //gameState 30
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(shooterScreen01,0,0,width,height);
+		image(shooterPre00,0,0,width,height);
 	} else if (scene == 1) {
-		image(shooterScreen02,0,0,width,height);
+		image(shooterPre01,0,0,width,height);
 	} else if (scene == 2) {
-		image(shooterScreen03,0,0,width,height);
+		image(shooterPre02,0,0,width,height);
+	} else if (scene == 3) {
+		image(shooterPre03,0,0,width,height);
 	} else {
 		gameState++;
 		scene = 0;
@@ -390,8 +394,10 @@ void loadShooterImages(){
 	fighter = loadImage("../../data/fighter.png");
 	fighterFire = loadImage("../../data/fighterFire.png");
 
-	shooterScreen01 = loadImage("../../data/Galaga Introduction Narrative-01.png");
-	shooterScreen02 = loadImage("../../data/Galaga Instructions 1-01.png");
-	shooterScreen03 = loadImage("../../data/Galaga instructions 2-01.png");
-	ShooterPost00 = loadImage("../../data/ShooterPost00.png");
+	shooterPre00 = loadImage("../../data/shooterPre00.png");
+	shooterPre01 = loadImage("../../data/shooterPre01.png");
+	shooterPre02 = loadImage("../../data/shooterPre02.png");
+	shooterPre03 = loadImage("../../data/shooterPre03.png");
+	shooterPost00 = loadImage("../../data/shooterPost00.png");
+
 }

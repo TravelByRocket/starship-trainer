@@ -1,16 +1,20 @@
 // gameState range 0-9
 
-PImage Intro00;
-PImage Intro01;
+PImage intro00;
+PImage intro01;
+PImage intro02;
 
 void introMain() {
 	
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(Intro00,0,0,width,height);
+		image(intro00,0,0,width,height);
 	} else if (scene == 1) {
-		image(Intro01,0,0,width,height);
+		image(intro01,0,0,width,height);
+		leapManager();
+	}  else if (scene == 2) {
+		image(intro02,0,0,width,height);
 		leapManager();
 	} else {
 		gameState = 10;
@@ -27,6 +31,7 @@ void userInputsIntro(){
 }
 
 void loadIntroImages(){
-	Intro00 = loadImage("../../data/Intro00.png");
-	Intro01 = loadImage("../../data/Intro01.png");
+	intro00 = loadImage("../../data/intro00.png");
+	intro01 = loadImage("../../data/intro01.png");
+	intro02 = loadImage("../../data/intro02.png");
 }

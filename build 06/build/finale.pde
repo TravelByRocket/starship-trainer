@@ -1,32 +1,29 @@
 // gameState range 50-59
 
-PImage FinalePre00;
-PImage FinalePre01;
-PImage FinalePre02;
-PImage FinalePre03;
-PImage FinalePost00;
-PImage FinalePost01;
-PImage FinalePost02;
+PImage finalePre00;
+PImage finalePre01;
+PImage finalePre02;
+PImage finalePre03;
+PImage finalePost00;
+PImage finalePost01;
+PImage finalePost02;
 
 PImage finaleScreenAfter01;
 
 void finaleIntro(){ //gameState 50
-	// tint(255);
-	// imageMode(CORNER);
-	// image(finaleScreenAfter01, 0, 0, width, height);
 
 	tint(255);
 
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(FinalePre00,0,0,width,height);
+		image(finalePre00,0,0,width,height);
 	} else if (scene == 1) {
-		image(FinalePre01,0,0,width,height);
+		image(finalePre01,0,0,width,height);
 	} else if (scene == 2) {
-		image(FinalePre02,0,0,width,height);
+		image(finalePre02,0,0,width,height);
 	} else if (scene == 3) {
-		image(FinalePre03,0,0,width,height);
+		image(finalePre03,0,0,width,height);
 	} else {
 		gameState++;
 		scene = 0;
@@ -47,7 +44,7 @@ void finaleGame(){ //gameState 52
 void finaleStory(){ // gameState 53
 	if (scene == 0) {
 		// image(FinalePost00,0,0,width,height);
-		image(FinalePost01,0,0,width,height);
+		image(finalePost01,0,0,width,height);
 	} else if (scene == 1) {
 		resetGame();
 		// image(FinalePost01,0,0,width,height);
@@ -73,13 +70,12 @@ void userInputsFinale(){
 }
 
 void loadFinaleImages(){
-	FinalePre00 = loadImage("../../data/FinalePre00.png");
-	FinalePre01 = loadImage("../../data/FinalePre01.png");
-	FinalePre02 = loadImage("../../data/FinalePre02.png");
-	FinalePre03 = loadImage("../../data/FinalePre03.png");
-	FinalePost00 = loadImage("../../data/FinalePost00.png");
-	FinalePost01 = loadImage("../../data/FinalePost01.png");
-	FinalePost02 = loadImage("../../data/FinalePost02.png");
+	finalePre00 = loadImage("../../data/finalePre00.png");
+	finalePre01 = loadImage("../../data/finalePre01.png");
+	finalePre02 = loadImage("../../data/finalePre02.png");
+	finalePre03 = loadImage("../../data/finalePre03.png");
+	finalePost00 = loadImage("../../data/finalePost00.png");
+	finalePost01 = loadImage("../../data/finalePost01.png");
 
 	finaleScreenAfter01 = loadImage("../../data/End screen 2-01.png");
 

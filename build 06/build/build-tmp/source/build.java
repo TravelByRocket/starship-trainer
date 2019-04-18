@@ -38,7 +38,7 @@ LeapMotion leap;
 // CHOOSE GAME DISPLAY MODE (select/deselect with comments)
 int gameMode = 0; // window, 1 screen
 // int gameMode = 1; // fullscreen, 1 screen
-// int gameMode = 2; // 1 screen, window, testing
+// int gameMode = 2; // window, 1 screen, external monitor
 // int gameMode = 3; // 2 screen, span
 
 // DISPLAY DEBUGGING VISUAL GUIDES (select/deselect with comments)
@@ -251,7 +251,7 @@ public void keyPressed() {
 
 // gameState range 40-49
 
-PImage AttackPost00;
+PImage attackPost00;
 
 boolean circs1 = false;
 boolean circs2 = false;
@@ -415,15 +415,17 @@ public void leapInputsAttack(){ //better to call userLeapShooter?
 }
 
 public void loadAttackImages(){
-	AttackPost00 = loadImage("../../data/AttackPost00.png");
+	attackPost00 = loadImage("../../data/attackPost00.png");
 }
 // gameState range 20-29
 
 PImage blast;
-PImage DefensePre00;
-PImage DefensePre01;
-PImage DefensePost00;
-PImage defenseScreen01;
+PImage defensePre00;
+PImage defensePre01;
+PImage defensePre02;
+PImage defensePre03;
+PImage defensePost00;
+
 PImage defenseBackground;
 PImage asteroid01;
 PImage asteroid02;
@@ -439,14 +441,17 @@ public void defenseIntro(){ //gameState 20
 	
 	startupDefense = true;
 
-	if (scene == 0) {
-		tint(255);
-		imageMode(CORNER);
-		image(DefensePre00,0,0,width,height);
+	tint(255);
+	imageMode(CORNER);
+	
+	if (scene == 0) {	
+		image(defensePre00,0,0,width,height);
 	} else if (scene == 1) {
-		tint(255);
-		imageMode(CORNER);
-		image(DefensePre01,0,0,width,height);
+		image(defensePre01,0,0,width,height);
+	} else if (scene == 2) {
+		image(defensePre02,0,0,width,height);
+	} else if (scene == 3) {
+		image(defensePre03,0,0,width,height);
 	} else {
 		gameState++;
 		scene = 0;
@@ -552,7 +557,7 @@ public void defenseGame(){ //gameState 22
 }
 
 public void defenseStory(){ //gameState 23
-	image(DefensePost00,0,0,height,width);
+	image(defensePost00,0,0,height,width);
 	defenseWin = true;
 	miniGameWin();
 
@@ -805,42 +810,42 @@ public void loadDefenseImages(){
 	asteroid01 = loadImage("../../data/asteroid01.png");
 	asteroid02 = loadImage("../../data/asteroid02.png");
 	asteroid03 = loadImage("../../data/asteroid03.png");
-	DefensePre00 = loadImage("../../data/DefensePre00.png");
-	DefensePre01 = loadImage("../../data/DefensePre01.png");
-	DefensePost00 = loadImage("../../data/DefensePost00.png");
-	defenseScreen01 = loadImage("../../data/Planet defense instructions 1-01.png");
+
+	defensePre00 = loadImage("../../data/defensePre00.png");
+	defensePre01 = loadImage("../../data/defensePre01.png");
+	defensePre02 = loadImage("../../data/defensePre02.png");
+	defensePre03 = loadImage("../../data/defensePre03.png");
+	defensePost00 = loadImage("../../data/defensePost00.png");
+
 	defenseBackground = loadImage("../../data/Planet Defense Blank Screen-01.png");
 	blast = loadImage("../../data/playerBlast.png");
 }
 // gameState range 50-59
 
-PImage FinalePre00;
-PImage FinalePre01;
-PImage FinalePre02;
-PImage FinalePre03;
-PImage FinalePost00;
-PImage FinalePost01;
-PImage FinalePost02;
+PImage finalePre00;
+PImage finalePre01;
+PImage finalePre02;
+PImage finalePre03;
+PImage finalePost00;
+PImage finalePost01;
+PImage finalePost02;
 
 PImage finaleScreenAfter01;
 
 public void finaleIntro(){ //gameState 50
-	// tint(255);
-	// imageMode(CORNER);
-	// image(finaleScreenAfter01, 0, 0, width, height);
 
 	tint(255);
 
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(FinalePre00,0,0,width,height);
+		image(finalePre00,0,0,width,height);
 	} else if (scene == 1) {
-		image(FinalePre01,0,0,width,height);
+		image(finalePre01,0,0,width,height);
 	} else if (scene == 2) {
-		image(FinalePre02,0,0,width,height);
+		image(finalePre02,0,0,width,height);
 	} else if (scene == 3) {
-		image(FinalePre03,0,0,width,height);
+		image(finalePre03,0,0,width,height);
 	} else {
 		gameState++;
 		scene = 0;
@@ -861,7 +866,7 @@ public void finaleGame(){ //gameState 52
 public void finaleStory(){ // gameState 53
 	if (scene == 0) {
 		// image(FinalePost00,0,0,width,height);
-		image(FinalePost01,0,0,width,height);
+		image(finalePost01,0,0,width,height);
 	} else if (scene == 1) {
 		resetGame();
 		// image(FinalePost01,0,0,width,height);
@@ -887,30 +892,33 @@ public void userInputsFinale(){
 }
 
 public void loadFinaleImages(){
-	FinalePre00 = loadImage("../../data/FinalePre00.png");
-	FinalePre01 = loadImage("../../data/FinalePre01.png");
-	FinalePre02 = loadImage("../../data/FinalePre02.png");
-	FinalePre03 = loadImage("../../data/FinalePre03.png");
-	FinalePost00 = loadImage("../../data/FinalePost00.png");
-	FinalePost01 = loadImage("../../data/FinalePost01.png");
-	FinalePost02 = loadImage("../../data/FinalePost02.png");
+	finalePre00 = loadImage("../../data/finalePre00.png");
+	finalePre01 = loadImage("../../data/finalePre01.png");
+	finalePre02 = loadImage("../../data/finalePre02.png");
+	finalePre03 = loadImage("../../data/finalePre03.png");
+	finalePost00 = loadImage("../../data/finalePost00.png");
+	finalePost01 = loadImage("../../data/finalePost01.png");
 
 	finaleScreenAfter01 = loadImage("../../data/End screen 2-01.png");
 
 }
 // gameState range 0-9
 
-PImage Intro00;
-PImage Intro01;
+PImage intro00;
+PImage intro01;
+PImage intro02;
 
 public void introMain() {
 	
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(Intro00,0,0,width,height);
+		image(intro00,0,0,width,height);
 	} else if (scene == 1) {
-		image(Intro01,0,0,width,height);
+		image(intro01,0,0,width,height);
+		leapManager();
+	}  else if (scene == 2) {
+		image(intro02,0,0,width,height);
 		leapManager();
 	} else {
 		gameState = 10;
@@ -927,8 +935,9 @@ public void userInputsIntro(){
 }
 
 public void loadIntroImages(){
-	Intro00 = loadImage("../../data/Intro00.png");
-	Intro01 = loadImage("../../data/Intro01.png");
+	intro00 = loadImage("../../data/intro00.png");
+	intro01 = loadImage("../../data/intro01.png");
+	intro02 = loadImage("../../data/intro02.png");
 }
 float commandPositionX;
 float commandPositionY;
@@ -1309,9 +1318,11 @@ PImage fighterFire;
 PImage enemy;
 PImage enemyFire;
 
-PImage shooterScreen01;
-PImage shooterScreen02;
-PImage shooterScreen03;
+PImage shooterPre00;
+PImage shooterPre01;
+PImage shooterPre02;
+PImage shooterPre03;
+PImage shooterPost00;
 
 PImage ShooterPost00;
 
@@ -1329,11 +1340,13 @@ public void shooterIntro(){ //gameState 30
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(shooterScreen01,0,0,width,height);
+		image(shooterPre00,0,0,width,height);
 	} else if (scene == 1) {
-		image(shooterScreen02,0,0,width,height);
+		image(shooterPre01,0,0,width,height);
 	} else if (scene == 2) {
-		image(shooterScreen03,0,0,width,height);
+		image(shooterPre02,0,0,width,height);
+	} else if (scene == 3) {
+		image(shooterPre03,0,0,width,height);
 	} else {
 		gameState++;
 		scene = 0;
@@ -1683,10 +1696,12 @@ public void loadShooterImages(){
 	fighter = loadImage("../../data/fighter.png");
 	fighterFire = loadImage("../../data/fighterFire.png");
 
-	shooterScreen01 = loadImage("../../data/Galaga Introduction Narrative-01.png");
-	shooterScreen02 = loadImage("../../data/Galaga Instructions 1-01.png");
-	shooterScreen03 = loadImage("../../data/Galaga instructions 2-01.png");
-	ShooterPost00 = loadImage("../../data/ShooterPost00.png");
+	shooterPre00 = loadImage("../../data/shooterPre00.png");
+	shooterPre01 = loadImage("../../data/shooterPre01.png");
+	shooterPre02 = loadImage("../../data/shooterPre02.png");
+	shooterPre03 = loadImage("../../data/shooterPre03.png");
+	shooterPost00 = loadImage("../../data/shooterPost00.png");
+
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "build" };
