@@ -12,18 +12,14 @@ PImage asteroid01;
 PImage asteroid02;
 PImage asteroid03;
 
-ArrayList<Asteroid> asteroids;
-ArrayList<Blast> blasts;
-ArrayList<ProgressMessage> progresses;
-BlastZone blastZone;
-boolean startupDefense; // turns off after first/initialization loop
+ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+ArrayList<Blast> blasts = new ArrayList<Blast>();
+ArrayList<ProgressMessage> progresses = new ArrayList<ProgressMessage>();
 
 void defenseIntro(){ //gameState 20
 	
-	startupDefense = true;
-
-	tint(255);
-	imageMode(CORNER);
+	tint(255,255);
+	imageMode(CORNERS);
 	
 	if (scene == 0) {	
 		image(defensePre00,0,0,width,height);
@@ -40,64 +36,27 @@ void defenseIntro(){ //gameState 20
 }
 
 void defenseTraining(){ // gameState 21
-	// make a circle with your right index finger
 	imageMode(CORNER);
-	image(bgStars,0,0,width,height);
+	image(defenseBackground,0,0,width,height);
 
 	textSize(18);
 	fill(255);
 	textAlign(CENTER,CENTER);
+
 	if (scene == 0){
-		text("Destroy the asteroid\n by making a circle with your\nright index finger", width/2, height*2/3);
+		asteroids.add(new Asteroid(width/2,height*2/5,"training"));
+		asteroids.add(new Asteroid(width/3,height*3/5,"training"));
+		asteroids.add(new Asteroid(width*2/3,height*3/5,"training"));
+		scene++;
 	} else if (scene == 1){
-		text("That's it! Do it again when the asteroid\nis in the defense zone", width/2, height*2/3);
-		for (Asteroid as : asteroids){
-			if (as.posX >width*.9){
-				as.posX = width/4;
-			}
+		if (asteroids.size() > 0){
+			text("Destroy the asteroids\n by making a circle with your\nright index finger", width/2, height*2/3);
+		} else {
+			text("You're ready.\nPress button to play", width/2, height*2/3);
 		}
 	} else if (scene == 2){
-		text("You're ready.\nPress button to play", width/2, height/2);
-	} else if (scene == 3){
 		gameState++;
 		scene = 0;
-	}
-
-	if (startupDefense && scene == 0){ // create on first loop 
-		asteroids = new ArrayList<Asteroid>();
-		blasts = new ArrayList<Blast>();
-		progresses = new ArrayList<ProgressMessage>();
-		asteroids.add(new Asteroid(width/2,height/2));
-		startupDefense = false; //don't run these initializations again
-		blastZone = new BlastZone(width*2,0,1,2); // created off-screen
-		// println("startup scene 0");
-	} else if (startupDefense && scene == 1){ // create on first loop 
-		asteroids = new ArrayList<Asteroid>();
-		blasts = new ArrayList<Blast>();
-		progresses = new ArrayList<ProgressMessage>();
-		asteroids.add(new Asteroid(width/3,height/2,1.5,0));
-		blastZone = new BlastZone(width*2.5,height/2,width*1.7,width*1.9);
-		startupDefense = false; //don't run these initializations again
-		// println("startup scene 1");
-	}
-
-	if (scene == 0 && blasts.size() > 0){
-		scene++;
-		startupDefense = true;
-	} else if (scene == 1 && asteroids.size() == 0){
-		scene++;
-		// for (Asteroid as : asteroids){
-		// 	if ( {
-		// 		scene++;
-		// 		startupDefense = true;
-		// 	} else if (as.posX > width*0.7){
-		// 		as.posX = width/4;
-		// 	}
-	} else if (scene == 2){
-	} else if (scene == 3) {
-		startupDefense = true;
-		scene = 0;
-		gameState++;
 	}
 
 	itemHandling();
@@ -109,29 +68,18 @@ void defenseGame(){ //gameState 22
 	imageMode(CORNER);
 	image(defenseBackground,0,0,width,height);
 
-	if (startupDefense){ // create on first loop 
-		asteroids = new ArrayList<Asteroid>();
-		blasts = new ArrayList<Blast>();
-		progresses = new ArrayList<ProgressMessage>();
-		// for (int k = 0; k < 5; k++){
-		// 	asteroids.add(new Asteroid());
-		// }
+	if (scene == 0){ // create on first loop
 		asteroids.add(new Asteroid(width*1/6,height*.3,.5,1.1));
 		asteroids.add(new Asteroid(width*2/6,height*.1,.55,.8));
 		asteroids.add(new Asteroid(width*3/6,height*.2,.4,.6));
 		asteroids.add(new Asteroid(width*4/6,height*.4,-.45,1.2));
 		asteroids.add(new Asteroid(width*5/6,height*.2,-.39,.7));
-		blastZone = new BlastZone(width*.5,height*1.1,1,width*.45);
-		// println("asteroids.size(): "+asteroids.size());
-		startupDefense = false; //don't run these initializations again
-		// println("defense game startup here");
+		scene++;
 	}
 
-
-	// println("asteroids.size(): "+asteroids.size());
-	// println("millis(): "+millis());
 	if (asteroids.size() == 0){
 		gameState++;
+		scene = 0;
 	}
 	itemHandling();
 	leapManager();
@@ -146,7 +94,6 @@ void defenseStory(){ //gameState 23
 }
 
 void userInputsDefense(){
-	
 	if (key == ' ') {
 		if(gameState == 20){
 			scene++;
@@ -167,8 +114,9 @@ void leapOnCircleGesture(CircleGesture g, int leapState){
 				PVector positionCenter = g.getCenter();
 				float progress = g.getProgress();
 				if (progress > 0.99){
-					blasts.add(new Blast());
-					progresses.add(new ProgressMessage("GOOD!"));
+					// blasts.add(new Blast());
+					blasts.add(new Blast(mapLeapX(positionCenter.x),mapLeapY(positionCenter.y)));
+					// progresses.add(new ProgressMessage("GOOD!"));
 				} else {
 					progresses.add(new ProgressMessage(round(progress*100),mapLeapX(positionCenter.x),mapLeapY(positionCenter.y)));
 				}
@@ -186,6 +134,12 @@ class Asteroid{
 	float velY;
 	boolean destroyed = false;
 	boolean destroyable = false;
+	String mode = "normal";
+	float fader = 255;
+	float fadeSpeed = 25;
+	float spinSpeedFactor = 0.4; // 1 -> 2.8 rev/sec; 0.5 -> 1.4 rev/sec
+	float rotationOffset = 0;
+	float illumOffset;
 
 	// int rotation = random(0, TWO_PI);
 	Asteroid(){
@@ -202,6 +156,17 @@ class Asteroid{
 		posY = thePosY;
 		velX = 0;
 		velY = 0;
+	}
+
+	Asteroid(float thePosX,float thePosY,String theMode){
+		type = (int) floor(random(0,3));
+		posX = thePosX;
+		posY = thePosY;
+		velX = 0;
+		velY = 0;
+		mode = "training";
+		rotationOffset = random(360);
+		illumOffset = random(1000);
 	}
 
 	Asteroid(float thePosX,float thePosY, float theVelX, float theVelY){
@@ -224,6 +189,27 @@ class Asteroid{
 			image(asteroid03, posX, posY, width*0.06, width*0.06);
 		}
 
+		if (mode == "training"){
+			ellipseMode(CENTER);
+			if ((millis() + illumOffset) % 2000 < 1000){
+				fader += fadeSpeed;
+			} else {
+				fader -= fadeSpeed;
+			}
+
+			if (fader < 0){
+				fader = 0;
+			} else if (fader > 255) {
+				fader = 255;
+			}
+
+			stroke(gameOrange, fader);
+			strokeWeight(3);
+			noFill();
+			ellipse(posX+width/8*cos(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
+				posY+width/8*sin(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
+				15,15);
+		}
 		posX+= velX;
 		posY+= velY;
 
@@ -240,65 +226,24 @@ class Blast{
 	boolean expired = false;
 	float distance;
 
-	Blast(){
-
+	Blast(float thePosX, float thePosY){
+		posX = thePosX;
+		posY = thePosY;
 	}
 
 	void draw(){
-		for (Asteroid as : asteroids){
-			if (as.destroyable == true){
-				// println("asteroid destroyable at: "+millis());
-				as.destroyed = true;
-				tint(fader);
-				imageMode(CENTER);
-				image(blast, as.posX, as.posY, width*0.10, width*0.10);
-				tint(255);
-				fader -=20;
-			}
+		tint(fader);
+		imageMode(CENTER);
+		image(blast, posX, posY, width*0.10, width*0.10);
+		tint(255);
+		fader -=20;
 		framesLived++;
-			if (framesLived >= frameLife){
-				expired = true;
-			}
+		if (framesLived >= frameLife){
+			expired = true;
 		}
-	}
-}
-
-class BlastZone{
-	// String zoneType;
-	float centerX;
-	float centerY;
-	float radiusInner;
-	float radiusOuter;
-	float distance;
-
-	BlastZone(float theCenterX, float theCenterY, float theRadiusInner, float theRadiusOuter){
-		centerX = theCenterX;
-		centerY = theCenterY;
-		radiusInner = theRadiusInner;
-		radiusOuter = theRadiusOuter;
-	}
-
-	void draw(){
-		ellipseMode(CENTER);
-		fill(gameRed,50);
-		ellipse(centerX, centerY, radiusOuter*2, radiusOuter*2);
-		fill(0);
-		ellipse(centerX, centerY, radiusInner*2, radiusInner*2);
 		for (Asteroid as : asteroids){
-			// distance = dist(as.posX,centerX,as.posY,centerY);
-			distance = sqrt(sq(as.posX-centerX)+sq(as.posY-centerY));
-			// println("distance: "+distance);
-			// println("radiusInner: "+radiusInner);
-			// println("radiusOuter: "+radiusOuter);
-			// println("distance > radiusInner: "+ (distance > radiusInner));
-			// println("distance < radiusOuter: "+ (distance < radiusOuter));
-			// println("millis(): "+millis());
-			if (distance > radiusInner && distance < radiusOuter){
-				as.destroyable = true;
-				// println("as.destroyable: "+as.destroyable);
-			} else {
-				as.destroyable = false;
-				// println("as.destroyable: "+as.destroyable);
+			if (dist(posX, posY, as.posX, as.posY) < width*0.05){
+				as.destroyed = true;
 			}
 		}
 	}
@@ -324,10 +269,10 @@ class ProgressMessage{
 
 	ProgressMessage(float theProgress, float theX, float theY){
 		percentage = theProgress;
-		// posX = theX;
-		// posY = theY;
-		posX = width/2;
-		posY = height/4;
+		posX = theX;
+		posY = theY;
+		// posX = width/2;
+		// posY = height/4;
 		messageType = "number";
 	}
 
@@ -352,7 +297,7 @@ class ProgressMessage{
 void itemHandling(){
 
 	noStroke();
-	blastZone.draw();
+	// blastZone.draw();
 
 	// ASTEROID HANDLING
 	for (int j = asteroids.size() - 1; j >= 0; j--) { // go backwards through ArrayList of asteroids
@@ -360,7 +305,8 @@ void itemHandling(){
 	 	if (as.destroyed) { // if it is expired
 	 		asteroids.remove(j); // then remove it from the ArrayList
 	 	} else if (as.posY>height){
-	 		miniGameLoss();
+	 		gameState = 61;
+	 		scene = 0;
 	 	} else {
 	 		as.draw();
 	 	}

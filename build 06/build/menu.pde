@@ -23,34 +23,34 @@ void menuTraining(){ // gameState 10
 	rectMode(CORNERS);
 	if (box1) {
 		fill(gameGreen);
-		rect(width*.05,height*.05,width*.15,height*.15);
+		rect(width*.05,height*.05,width*.25,height*.15);
 	} else if (!box1) {
 		fill(gameOrange);
-		rect(width*.05,height*.05,width*.15,height*.15);
+		rect(width*.05,height*.05,width*.25,height*.15);
 	}
 
 	if (box2) {
 		fill(gameGreen);
-		rect(width*.85,height*.05,width*.95,height*.15);
+		rect(width*.75,height*.05,width*.95,height*.15);
 	} else if (!box2) {
 		fill(gameOrange);
-		rect(width*.85,height*.05,width*.95,height*.15);
+		rect(width*.75,height*.05,width*.95,height*.15);
 	}
 
 	if (box3) {
 		fill(gameGreen);
-		rect(width*.05,height*.85,width*.15,height*.95);
+		rect(width*.05,height*.85,width*.25,height*.95);
 	} else if (!box3) {
 		fill(gameOrange);
-		rect(width*.05,height*.85,width*.15,height*.95);
+		rect(width*.05,height*.85,width*.25,height*.95);
 	}
 
 	if (box4) {
 		fill(gameGreen);
-		rect(width*.85,height*.85,width*.95,height*.95);
+		rect(width*.75,height*.85,width*.95,height*.95);
 	} else if (!box4) {
 		fill(gameOrange);
-		rect(width*.85,height*.85,width*.95,height*.95);
+		rect(width*.75,height*.85,width*.95,height*.95);
 	}
 
 	if (commandPositionX > width*.05 && commandPositionX < width*.15 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
