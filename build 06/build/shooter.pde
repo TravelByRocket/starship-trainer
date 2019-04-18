@@ -22,8 +22,6 @@ PImage shooterPre02;
 PImage shooterPre03;
 PImage shooterPost00;
 
-PImage ShooterPost00;
-
 boolean startupShooter; // turns off after first/initialization loop
 Player player;
 ArrayList<MissilePlayer> missilesPlayer;
@@ -69,23 +67,23 @@ void shooterTraining(){ // gameState 31
 	noStroke();
 	if (rect1) {
 		fill(gameGreen);
-		rect(width*.2,height*.85,width*.4,height*.95);
+		rect(width*.1,height*.85,width*.3,height*.95);
 	} else if (!rect1) {
 		fill(gameOrange);
-		rect(width*.2,height*.85,width*.4,height*.95);
+		rect(width*.1,height*.85,width*.3,height*.95);
 	}
 
 	if (rect2) {
 		fill(gameGreen);
-		rect(width*.6,height*.85,width*.8,height*.95);
+		rect(width*.7,height*.85,width*.9,height*.95);
 	} else if (!box2) {
 		fill(gameOrange);
-		rect(width*.6,height*.85,width*.8,height*.95);
+		rect(width*.7,height*.85,width*.9,height*.95);
 	}
 
-	if (player.posX > width*.2 && player.posX < width*.4){
+	if (player.posX > width*.1 && player.posX < width*.3){
 		rect1 = true;
-	} else if (player.posX > width*.6 && player.posX < width*.8){
+	} else if (player.posX > width*.7 && player.posX < width*.9){
 		rect2 = true;
 	}
 
@@ -142,7 +140,7 @@ void shooterGame(){ //gameState 32
 	for (Enemy en : enemies) {
 		for (MissilePlayer mi : missilesPlayer){
 			float dist = sqrt(sq(en.posX-mi.posX)+sq(en.posY-mi.posY));
-			if (dist < width/40){
+			if (dist < craftSize*.7){
 				en.alive = false;
 				mi.posY = -50; // move missile off screen to be deleted
 			}
@@ -152,7 +150,7 @@ void shooterGame(){ //gameState 32
 	// PLAYER DAMAGE
 	for (MissileEnemy mi : missilesEnemy){
 		float dist = sqrt(sq(player.posX-mi.posX)+sq(player.posY-mi.posY));
-		if (dist < width/30){
+		if (dist < craftSize*0.7){
 			player.health--; // hit the player, cause damage
 			mi.posY = height+50; // move missile off screen to be deleted
 		}
@@ -189,14 +187,23 @@ void shooterGame(){ //gameState 32
 	}
 
 	if (enemies.size() == 0){
+		scene = 0;
 		gameState++;
+		shooterWin = true;
 	}
 
 }
 
 void shooterStory(){ //gameState 33
-	shooterWin = true;
-	miniGameWin();
+	imageMode(CORNERS);
+	if (scene == 0){
+		image(shooterPost00,0,0,width,height);
+	} else if (scene == 1) {
+		scene = 0;
+		gameState = 60;
+	}
+	
+	// miniGameWin();
 }
 
 void userInputsShooter(){ //better to call userKeysShooter?
@@ -217,6 +224,8 @@ void userInputsShooter(){ //better to call userKeysShooter?
 			rect1 = false;
 			rect2 = false;
 			startupShooter = true;
+		} else if (gameState == 33) {
+			scene++;
 		} else {
 			gameState++;
 		}
@@ -241,6 +250,10 @@ void leapInputsShooter(){
 	
 }
 
+float missileSpeed = height/20;
+float missileSize = width/2;
+float craftSize = width/2;
+
 class Player{
 	int health = 10;
 	float posX = width/2;
@@ -254,7 +267,7 @@ class Player{
 
 	void draw(){
 		imageMode(CENTER);
-		image(fighter, posX, posY, width/20, width/20);
+		image(fighter, posX, posY, craftSize, craftSize);
 		drawHealthBar();
 		if (health <= 0) { // go back to menu if dead
 			miniGameLoss();
@@ -328,7 +341,7 @@ class MissilePlayer{
 	boolean active = true;
 	float posX;
 	float posY;
-	float velY = -height/50;
+	float velY = -missileSpeed;
 
 	MissilePlayer(){
 		posX = player.posX;
@@ -337,7 +350,7 @@ class MissilePlayer{
 
 	void draw(){
 		imageMode(CENTER);
-		image(fighterFire, posX, posY, width/50, width/50);
+		image(fighterFire, posX, posY, missileSize, missileSize);
 		posY += velY;
 	}
 
@@ -347,7 +360,7 @@ class MissileEnemy{
 	boolean active = true;
 	float posX;
 	float posY;
-	float velY = height/80;
+	float velY = missileSpeed;
 
 	MissileEnemy(float posX_, float posY_){
 		posX = posX_;
@@ -356,7 +369,7 @@ class MissileEnemy{
 
 	void draw(){
 		imageMode(CENTER);
-		image(enemyFire, posX, posY, width/50, width/50);
+		image(enemyFire, posX, posY, missileSize, missileSize);
 		posY += velY;
 	}
 }
@@ -372,7 +385,7 @@ class Enemy{
 
 	void draw(){
 		imageMode(CENTER);
-		image(enemy, posX, posY, width/20, width/20);
+		image(enemy, posX, posY, craftSize, craftSize);
 	}
 
 }

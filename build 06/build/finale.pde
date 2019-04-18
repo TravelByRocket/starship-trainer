@@ -8,8 +8,6 @@ PImage finalePost00;
 PImage finalePost01;
 PImage finalePost02;
 
-PImage finaleScreenAfter01;
-
 void finaleIntro(){ //gameState 50
 
 	tint(255);
@@ -76,7 +74,5 @@ void loadFinaleImages(){
 	finalePre03 = loadImage("../../data/finalePre03.png");
 	finalePost00 = loadImage("../../data/finalePost00.png");
 	finalePost01 = loadImage("../../data/finalePost01.png");
-
-	finaleScreenAfter01 = loadImage("../../data/End screen 2-01.png");
 
 }

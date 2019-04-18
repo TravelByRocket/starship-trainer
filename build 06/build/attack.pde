@@ -141,7 +141,8 @@ void attackStory(){ // // gameState 43
 	textAlign(CENTER,CENTER);
 	text("Attack Game Win", width/2, height/2);
 	attackWin = true;
-	miniGameWin();
+	// miniGameWin();
+	gameState = 60;
 }
 
 void userInputsAttack(){

@@ -50,6 +50,10 @@ boolean planMode = true; // DO display guides
 PImage missionSuccess;
 PImage missionFail;
 PImage bgStars;
+PImage firstPost00;
+PImage firstPost01;
+PImage secondPost00;
+PImage secondPost01;
 
 //COLORS
 int gameOrange = 0xffFF931E;
@@ -96,10 +100,13 @@ public void setup() {
 	leap = new LeapMotion(this).allowGestures("circle");
 
 	// IMAGES
-	
 	missionSuccess = loadImage("../../data/missionSuccess.png");
 	missionFail = loadImage("../../data/missionFail.png");
 	bgStars = loadImage("../../data/background.png");
+	firstPost00 = loadImage("../../data/firstPost00.png");
+	firstPost01 = loadImage("../../data/firstPost01.png");
+	secondPost00 = loadImage("../../data/secondPost00.png");
+	secondPost01 = loadImage("../../data/secondPost01.png");
 
 	loadIntroImages();
 	loadMenuImages();
@@ -175,6 +182,9 @@ public void draw() {
 		case 53: // finale
 			finaleStory();
 			break;
+		case 60: // miniGameWin
+			miniGameWin();
+			break;
 	}
 
 	if(planMode){
@@ -185,13 +195,37 @@ public void draw() {
 	}
 }
 
+int numGameWins = 0;
+
 public void miniGameWin(){
-	if (defenseWin && shooterWin && attackWin) {
+
+	imageMode(CORNERS);
+	if (scene == 0){
+		numGameWins++;
+		scene++;
+	}
+
+	if (numGameWins == 1) {
+		if (scene == 1) {
+			image(firstPost00, 0, 0, width, height);
+		} else if (scene == 2) {
+			image(firstPost01, 0, 0, width, height);
+		} else if (scene == 3) {
+			scene = 0;
+			gameState = 11;
+		}
+	} else if (numGameWins == 2) {
+		if (scene == 1) {
+			image(secondPost00, 0, 0, width, height);
+		} else if (scene == 2) {
+			image(secondPost01, 0, 0, width, height);
+		} else if (scene == 3) {
+			scene = 0;
+			gameState = 11;
+		}
+	} else if (numGameWins == 3) {
+		scene = 0;
 		gameState = 50;
-		// scene = 0;
-	} else {
-		gameState = 11;
-		// scene = 0;
 	}
 }
 
@@ -223,6 +257,8 @@ public void keyPressed() {
 		userInputsAttack();
 	} else if (gameState >= 50 && gameState < 59) {
 		userInputsFinale();
+	} else if (gameState >= 60 && gameState < 69) {
+		scene++;
 	} else if (key == ' ') { // catch the remaining spacebar presses
 		gameState++;
 	}
@@ -392,7 +428,8 @@ public void attackStory(){ // // gameState 43
 	textAlign(CENTER,CENTER);
 	text("Attack Game Win", width/2, height/2);
 	attackWin = true;
-	miniGameWin();
+	// miniGameWin();
+	gameState = 60;
 }
 
 public void userInputsAttack(){
@@ -559,7 +596,8 @@ public void defenseGame(){ //gameState 22
 public void defenseStory(){ //gameState 23
 	image(defensePost00,0,0,height,width);
 	defenseWin = true;
-	miniGameWin();
+	// miniGameWin();
+	gameState = 60;
 
 }
 
@@ -830,8 +868,6 @@ PImage finalePost00;
 PImage finalePost01;
 PImage finalePost02;
 
-PImage finaleScreenAfter01;
-
 public void finaleIntro(){ //gameState 50
 
 	tint(255);
@@ -898,8 +934,6 @@ public void loadFinaleImages(){
 	finalePre03 = loadImage("../../data/finalePre03.png");
 	finalePost00 = loadImage("../../data/finalePost00.png");
 	finalePost01 = loadImage("../../data/finalePost01.png");
-
-	finaleScreenAfter01 = loadImage("../../data/End screen 2-01.png");
 
 }
 // gameState range 0-9
@@ -1324,8 +1358,6 @@ PImage shooterPre02;
 PImage shooterPre03;
 PImage shooterPost00;
 
-PImage ShooterPost00;
-
 boolean startupShooter; // turns off after first/initialization loop
 Player player;
 ArrayList<MissilePlayer> missilesPlayer;
@@ -1371,23 +1403,23 @@ public void shooterTraining(){ // gameState 31
 	noStroke();
 	if (rect1) {
 		fill(gameGreen);
-		rect(width*.2f,height*.85f,width*.4f,height*.95f);
+		rect(width*.1f,height*.85f,width*.3f,height*.95f);
 	} else if (!rect1) {
 		fill(gameOrange);
-		rect(width*.2f,height*.85f,width*.4f,height*.95f);
+		rect(width*.1f,height*.85f,width*.3f,height*.95f);
 	}
 
 	if (rect2) {
 		fill(gameGreen);
-		rect(width*.6f,height*.85f,width*.8f,height*.95f);
+		rect(width*.7f,height*.85f,width*.9f,height*.95f);
 	} else if (!box2) {
 		fill(gameOrange);
-		rect(width*.6f,height*.85f,width*.8f,height*.95f);
+		rect(width*.7f,height*.85f,width*.9f,height*.95f);
 	}
 
-	if (player.posX > width*.2f && player.posX < width*.4f){
+	if (player.posX > width*.1f && player.posX < width*.3f){
 		rect1 = true;
-	} else if (player.posX > width*.6f && player.posX < width*.8f){
+	} else if (player.posX > width*.7f && player.posX < width*.9f){
 		rect2 = true;
 	}
 
@@ -1444,7 +1476,7 @@ public void shooterGame(){ //gameState 32
 	for (Enemy en : enemies) {
 		for (MissilePlayer mi : missilesPlayer){
 			float dist = sqrt(sq(en.posX-mi.posX)+sq(en.posY-mi.posY));
-			if (dist < width/40){
+			if (dist < craftSize*.7f){
 				en.alive = false;
 				mi.posY = -50; // move missile off screen to be deleted
 			}
@@ -1454,7 +1486,7 @@ public void shooterGame(){ //gameState 32
 	// PLAYER DAMAGE
 	for (MissileEnemy mi : missilesEnemy){
 		float dist = sqrt(sq(player.posX-mi.posX)+sq(player.posY-mi.posY));
-		if (dist < width/30){
+		if (dist < craftSize*0.7f){
 			player.health--; // hit the player, cause damage
 			mi.posY = height+50; // move missile off screen to be deleted
 		}
@@ -1491,14 +1523,23 @@ public void shooterGame(){ //gameState 32
 	}
 
 	if (enemies.size() == 0){
+		scene = 0;
 		gameState++;
+		shooterWin = true;
 	}
 
 }
 
 public void shooterStory(){ //gameState 33
-	shooterWin = true;
-	miniGameWin();
+	imageMode(CORNERS);
+	if (scene == 0){
+		image(shooterPost00,0,0,width,height);
+	} else if (scene == 1) {
+		scene = 0;
+		gameState = 60;
+	}
+	
+	// miniGameWin();
 }
 
 public void userInputsShooter(){ //better to call userKeysShooter?
@@ -1519,6 +1560,8 @@ public void userInputsShooter(){ //better to call userKeysShooter?
 			rect1 = false;
 			rect2 = false;
 			startupShooter = true;
+		} else if (gameState == 33) {
+			scene++;
 		} else {
 			gameState++;
 		}
@@ -1543,6 +1586,10 @@ public void leapInputsShooter(){
 	
 }
 
+float missileSpeed = height/20;
+float missileSize = width/2;
+float craftSize = width/2;
+
 class Player{
 	int health = 10;
 	float posX = width/2;
@@ -1556,7 +1603,7 @@ class Player{
 
 	public void draw(){
 		imageMode(CENTER);
-		image(fighter, posX, posY, width/20, width/20);
+		image(fighter, posX, posY, craftSize, craftSize);
 		drawHealthBar();
 		if (health <= 0) { // go back to menu if dead
 			miniGameLoss();
@@ -1630,7 +1677,7 @@ class MissilePlayer{
 	boolean active = true;
 	float posX;
 	float posY;
-	float velY = -height/50;
+	float velY = -missileSpeed;
 
 	MissilePlayer(){
 		posX = player.posX;
@@ -1639,7 +1686,7 @@ class MissilePlayer{
 
 	public void draw(){
 		imageMode(CENTER);
-		image(fighterFire, posX, posY, width/50, width/50);
+		image(fighterFire, posX, posY, missileSize, missileSize);
 		posY += velY;
 	}
 
@@ -1649,7 +1696,7 @@ class MissileEnemy{
 	boolean active = true;
 	float posX;
 	float posY;
-	float velY = height/80;
+	float velY = missileSpeed;
 
 	MissileEnemy(float posX_, float posY_){
 		posX = posX_;
@@ -1658,7 +1705,7 @@ class MissileEnemy{
 
 	public void draw(){
 		imageMode(CENTER);
-		image(enemyFire, posX, posY, width/50, width/50);
+		image(enemyFire, posX, posY, missileSize, missileSize);
 		posY += velY;
 	}
 }
@@ -1674,7 +1721,7 @@ class Enemy{
 
 	public void draw(){
 		imageMode(CENTER);
-		image(enemy, posX, posY, width/20, width/20);
+		image(enemy, posX, posY, craftSize, craftSize);
 	}
 
 }

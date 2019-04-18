@@ -140,7 +140,8 @@ void defenseGame(){ //gameState 22
 void defenseStory(){ //gameState 23
 	image(defensePost00,0,0,height,width);
 	defenseWin = true;
-	miniGameWin();
+	// miniGameWin();
+	gameState = 60;
 
 }
 

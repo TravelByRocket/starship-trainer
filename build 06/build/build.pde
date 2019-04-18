@@ -32,6 +32,10 @@ boolean planMode = true; // DO display guides
 PImage missionSuccess;
 PImage missionFail;
 PImage bgStars;
+PImage firstPost00;
+PImage firstPost01;
+PImage secondPost00;
+PImage secondPost01;
 
 //COLORS
 color gameOrange = #FF931E;
@@ -78,10 +82,13 @@ void setup() {
 	leap = new LeapMotion(this).allowGestures("circle");
 
 	// IMAGES
-	
 	missionSuccess = loadImage("../../data/missionSuccess.png");
 	missionFail = loadImage("../../data/missionFail.png");
 	bgStars = loadImage("../../data/background.png");
+	firstPost00 = loadImage("../../data/firstPost00.png");
+	firstPost01 = loadImage("../../data/firstPost01.png");
+	secondPost00 = loadImage("../../data/secondPost00.png");
+	secondPost01 = loadImage("../../data/secondPost01.png");
 
 	loadIntroImages();
 	loadMenuImages();
@@ -157,6 +164,9 @@ void draw() {
 		case 53: // finale
 			finaleStory();
 			break;
+		case 60: // miniGameWin
+			miniGameWin();
+			break;
 	}
 
 	if(planMode){
@@ -167,19 +177,48 @@ void draw() {
 	}
 }
 
-void miniGameWin(){
-	if (defenseWin && shooterWin && attackWin) {
+int numGameWins = 0;
+
+void miniGameWin(){ //gamestate 60
+
+	imageMode(CORNERS);
+	if (scene == 0){
+		numGameWins++;
+		scene++;
+	}
+
+	if (numGameWins == 1) {
+		if (scene == 1) {
+			image(firstPost00, 0, 0, width, height);
+		} else if (scene == 2) {
+			image(firstPost01, 0, 0, width, height);
+		} else if (scene == 3) {
+			scene = 0;
+			gameState = 11;
+		}
+	} else if (numGameWins == 2) {
+		if (scene == 1) {
+			image(secondPost00, 0, 0, width, height);
+		} else if (scene == 2) {
+			image(secondPost01, 0, 0, width, height);
+		} else if (scene == 3) {
+			scene = 0;
+			gameState = 11;
+		}
+	} else if (numGameWins == 3) {
+		scene = 0;
 		gameState = 50;
-		// scene = 0;
-	} else {
-		gameState = 11;
-		// scene = 0;
 	}
 }
 
-void miniGameLoss(){
-	gameState = 11;
-	// scene = 0;
+void miniGameLoss(){ //gamestate 61
+	imageMode(CORNERS);
+	if (scene == 0) {
+		image(missionFail, 0, 0, width, height);
+	} else if (scene == 1) {
+		scene = 0;
+		gameState = 11;
+	}
 }
 
 void resetGame(){
@@ -205,6 +244,8 @@ void keyPressed() {
 		userInputsAttack();
 	} else if (gameState >= 50 && gameState < 59) {
 		userInputsFinale();
+	} else if (gameState >= 60 && gameState < 69) {
+		scene++;
 	} else if (key == ' ') { // catch the remaining spacebar presses
 		gameState++;
 	}
