@@ -57,8 +57,6 @@ boolean defenseWin = false;
 boolean shooterWin = false;
 boolean attackWin = false;
 
-
-
 void settings() {
 	switch(gameMode) {
 		case 0:
@@ -167,6 +165,9 @@ void draw() {
 		case 60: // miniGameWin
 			miniGameWin();
 			break;
+		case 61: // miniGameWin
+			miniGameLoss();
+			break;
 	}
 
 	if(planMode){
@@ -216,8 +217,8 @@ void miniGameLoss(){ //gamestate 61
 	if (scene == 0) {
 		image(missionFail, 0, 0, width, height);
 	} else if (scene == 1) {
-		scene = 0;
 		gameState = 11;
+		scene = 0;
 	}
 }
 
@@ -269,6 +270,11 @@ void keyPressed() {
 	} else if (key == '5'){ // finale
 		gameState = 50;
 		scene = 0;
+	}
+
+	if (key == 'w'){
+		println("gameState: "+gameState);
+		println("scene: "+scene);
 	}
 }
 

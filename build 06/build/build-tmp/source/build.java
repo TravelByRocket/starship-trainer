@@ -75,8 +75,6 @@ boolean defenseWin = false;
 boolean shooterWin = false;
 boolean attackWin = false;
 
-
-
 public void settings() {
 	switch(gameMode) {
 		case 0:
@@ -185,6 +183,9 @@ public void draw() {
 		case 60: // miniGameWin
 			miniGameWin();
 			break;
+		case 61: // miniGameWin
+			miniGameLoss();
+			break;
 	}
 
 	if(planMode){
@@ -234,8 +235,8 @@ public void miniGameLoss(){ //gamestate 61
 	if (scene == 0) {
 		image(missionFail, 0, 0, width, height);
 	} else if (scene == 1) {
-		scene = 0;
 		gameState = 11;
+		scene = 0;
 	}
 }
 
@@ -287,6 +288,11 @@ public void keyPressed() {
 	} else if (key == '5'){ // finale
 		gameState = 50;
 		scene = 0;
+	}
+
+	if (key == 'w'){
+		println("gameState: "+gameState);
+		println("scene: "+scene);
 	}
 }
 
@@ -473,20 +479,19 @@ PImage asteroid01;
 PImage asteroid02;
 PImage asteroid03;
 
-ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
-ArrayList<Blast> blasts = new ArrayList<Blast>();
-ArrayList<ProgressMessage> progresses = new ArrayList<ProgressMessage>();
+ArrayList<Asteroid> asteroids;
+ArrayList<Blast> blasts;
+ArrayList<ProgressMessage> progresses;
 
-// asteroids = new ArrayList<Asteroid>();
-// blasts = new ArrayList<Blast>();
-// progresses = new ArrayList<ProgressMessage>();
-// BlastZone blastZone;
-// boolean startupDefense; // turns off after first/initialization loop
+float planetCenterX;
+float planetCenterY;
+float planetRadius;
+
+int planetHealth = 10;
+int destroyCount = 0;
 
 public void defenseIntro(){ //gameState 20
 	
-	// startupDefense = true;
-
 	tint(255,255);
 	imageMode(CORNERS);
 	
@@ -513,9 +518,9 @@ public void defenseTraining(){ // gameState 21
 	textAlign(CENTER,CENTER);
 
 	if (scene == 0){
-		// asteroids = new ArrayList<Asteroid>();
-		// blasts = new ArrayList<Blast>();
-		// progresses = new ArrayList<ProgressMessage>();
+		asteroids = new ArrayList<Asteroid>();
+		blasts = new ArrayList<Blast>();
+		progresses = new ArrayList<ProgressMessage>();
 		asteroids.add(new Asteroid(width/2,height*2/5,"training"));
 		asteroids.add(new Asteroid(width/3,height*3/5,"training"));
 		asteroids.add(new Asteroid(width*2/3,height*3/5,"training"));
@@ -539,25 +544,45 @@ public void defenseGame(){ //gameState 22
 
 	imageMode(CORNER);
 	image(defenseBackground,0,0,width,height);
+	int numActiveAsteroids = 10;
 
-	if (scene == 0){ // create on first loop 
-		// asteroids = new ArrayList<Asteroid>();
-		// blasts = new ArrayList<Blast>();
-		// progresses = new ArrayList<ProgressMessage>();
-		asteroids.add(new Asteroid(width*1/6,height*.3f,.5f,1.1f));
-		asteroids.add(new Asteroid(width*2/6,height*.1f,.55f,.8f));
-		asteroids.add(new Asteroid(width*3/6,height*.2f,.4f,.6f));
-		asteroids.add(new Asteroid(width*4/6,height*.4f,-.45f,1.2f));
-		asteroids.add(new Asteroid(width*5/6,height*.2f,-.39f,.7f));
-		// blastZone = new BlastZone(width*.5,height*1.1,1,width*.45);
-		// startupDefense = false; //don't run these initializations again
+	if (scene == 0){
+		asteroids = new ArrayList<Asteroid>();
+		blasts = new ArrayList<Blast>();
+		progresses = new ArrayList<ProgressMessage>();
+		for (int i = 0; i < numActiveAsteroids; i++){
+			asteroids.add(new Asteroid());
+		}
+		planetCenterX = width/2;
+		planetCenterY = height;
+		planetRadius = width*.4f;
 		scene++;
+	} else if (scene == 1){
+		if (asteroids.size() < numActiveAsteroids){
+			asteroids.add(new Asteroid());
+		}
 	}
 
-	if (asteroids.size() == 0){
+	if (destroyCount >= 20){
 		gameState++;
 		scene = 0;
+	} else if (planetHealth <= 0) {
+		gameState = 61;
+		scene = 0;
 	}
+
+	textSize(22);
+	fill(gameOrange);
+	textAlign(LEFT,TOP);
+	text("Asteroids Destroyed:"+destroyCount+"of 20", 0, 0);
+
+	ellipseMode(CENTER);
+	strokeWeight(3);
+	stroke(gameRed);
+	noFill();
+	ellipse(planetCenterX, planetCenterY, planetRadius*2, planetRadius*2);
+
+	drawHealthBarPlanet(planetHealth);
 	itemHandling();
 	leapManager();
 }
@@ -579,7 +604,9 @@ public void userInputsDefense(){
 		} else if (gameState == 22) {
 			//no button needed
 		}	
-	}
+	} else if (keyCode == DOWN) {
+		planetHealth--;
+	} 
 	
 }
 
@@ -604,7 +631,6 @@ public void leapOnCircleGesture(CircleGesture g, int leapState){
 }
 
 class Asteroid{
-	int type;
 	float posX;
 	float posY;
 	float velX;
@@ -618,17 +644,14 @@ class Asteroid{
 	float rotationOffset = 0;
 	float illumOffset;
 
-	// int rotation = random(0, TWO_PI);
 	Asteroid(){
-		type = (int) floor(random(0,3));
 		posX = random(width*0.2f,width*0.8f);
-		posY = random(height*0.1f,height*0.7f);
-		velX = 0;
-		velY = 0;
+		posY = random(-50,-300);
+		velX = random(-.5f,.5f);
+		velY = random(0.5f,2);
 	}
 
 	Asteroid(float thePosX,float thePosY){
-		type = (int) floor(random(0,3));
 		posX = thePosX;
 		posY = thePosY;
 		velX = 0;
@@ -636,7 +659,6 @@ class Asteroid{
 	}
 
 	Asteroid(float thePosX,float thePosY,String theMode){
-		type = (int) floor(random(0,3));
 		posX = thePosX;
 		posY = thePosY;
 		velX = 0;
@@ -647,7 +669,6 @@ class Asteroid{
 	}
 
 	Asteroid(float thePosX,float thePosY, float theVelX, float theVelY){
-		type = (int) floor(random(0,3));
 		posX = thePosX;
 		posY = thePosY;
 		velX = theVelX;
@@ -658,13 +679,7 @@ class Asteroid{
 		imageMode(CENTER);
 		tint(255,255);
 		noFill();
-		if (type == 0){
-			image(asteroid01, posX, posY, width*0.06f, width*0.06f);
-		} else if (type == 1) {
-			image(asteroid02, posX, posY, width*0.06f, width*0.06f);
-		} else if (type == 2) {
-			image(asteroid03, posX, posY, width*0.06f, width*0.06f);
-		}
+		image(asteroid01, posX, posY, width*0.06f, width*0.06f);
 
 		if (mode == "training"){
 			ellipseMode(CENTER);
@@ -690,8 +705,16 @@ class Asteroid{
 		posX+= velX;
 		posY+= velY;
 
+		collisionCheck();
+
 	}
 
+	public void collisionCheck(){
+		if (dist(planetCenterX,planetCenterY,posX,posY)<planetRadius){
+			destroyed = true;
+			planetHealth--;
+		}
+	}
 }
 
 class Blast{
@@ -719,8 +742,9 @@ class Blast{
 			expired = true;
 		}
 		for (Asteroid as : asteroids){
-			if (dist(posX, posY, as.posX, as.posY) < width*0.1f){
+			if (dist(posX, posY, as.posX, as.posY) < width*0.05f){
 				as.destroyed = true;
+				destroyCount++;
 			}
 		}
 	}
@@ -779,10 +803,8 @@ public void itemHandling(){
 	// ASTEROID HANDLING
 	for (int j = asteroids.size() - 1; j >= 0; j--) { // go backwards through ArrayList of asteroids
 	 	Asteroid as = asteroids.get(j); // get the missile at current index
-	 	if (as.destroyed) { // if it is expired
+	 	if (as.destroyed || as.posY > height || as.posX < 0 || as.posX > width) { // if it is expired
 	 		asteroids.remove(j); // then remove it from the ArrayList
-	 	} else if (as.posY>height){
-	 		miniGameLoss();
 	 	} else {
 	 		as.draw();
 	 	}
@@ -823,6 +845,31 @@ public void loadDefenseImages(){
 
 	defenseBackground = loadImage("../../data/Planet Defense Blank Screen-01.png");
 	blast = loadImage("../../data/playerBlast.png");
+}
+
+public void drawHealthBarPlanet(int theHealth){
+	imageMode(CENTER);
+	if (theHealth == 10) {
+		image(status10,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 9) {
+		image(status09,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 8) {
+		image(status08,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 7) {
+		image(status07,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 6) {
+		image(status06,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 5) {
+		image(status05,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 4) {
+		image(status04,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 3) {
+		image(status03,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 2) {
+		image(status02,width*.90f,height/2,width*0.2f,height*0.9f);
+	} else if (theHealth == 1) {
+		image(status01,width*.90f,height/2,width*0.2f,height*0.9f);
+	}
 }
 // gameState range 50-59
 
@@ -1140,13 +1187,13 @@ public void menuTraining(){ // gameState 10
 		rect(width*.75f,height*.85f,width*.95f,height*.95f);
 	}
 
-	if (commandPositionX > width*.05f && commandPositionX < width*.15f && commandPositionY > height*0.05f && commandPositionY < height*0.15f){
+	if (commandPositionX > width*.05f && commandPositionX < width*.25f && commandPositionY > height*0.05f && commandPositionY < height*0.15f){
 		box1 = true;
-	} else if (commandPositionX > width*.85f && commandPositionX < width*.95f && commandPositionY > height*0.05f && commandPositionY < height*0.15f){
+	} else if (commandPositionX > width*.75f && commandPositionX < width*.95f && commandPositionY > height*0.05f && commandPositionY < height*0.15f){
 		box2 = true;
-	} else if (commandPositionX > width*.05f && commandPositionX < width*.15f && commandPositionY > height*0.85f && commandPositionY < height*0.95f){
+	} else if (commandPositionX > width*.05f && commandPositionX < width*.25f && commandPositionY > height*0.85f && commandPositionY < height*0.95f){
 		box3 = true;
-	} else if (commandPositionX > width*.85f && commandPositionX < width*.95f && commandPositionY > height*0.85f && commandPositionY < height*0.95f){
+	} else if (commandPositionX > width*.75f && commandPositionX < width*.95f && commandPositionY > height*0.85f && commandPositionY < height*0.95f){
 		box4 = true;
 	}
 
@@ -1599,7 +1646,6 @@ class Player{
 		} else if (health == 1) {
 			image(status01,width*.90f,height/2,width*0.2f,height*0.9f);
 		}
-
 	}
 
 	public void floatLeft(){

@@ -53,13 +53,13 @@ void menuTraining(){ // gameState 10
 		rect(width*.75,height*.85,width*.95,height*.95);
 	}
 
-	if (commandPositionX > width*.05 && commandPositionX < width*.15 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
+	if (commandPositionX > width*.05 && commandPositionX < width*.25 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
 		box1 = true;
-	} else if (commandPositionX > width*.85 && commandPositionX < width*.95 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
+	} else if (commandPositionX > width*.75 && commandPositionX < width*.95 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
 		box2 = true;
-	} else if (commandPositionX > width*.05 && commandPositionX < width*.15 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
+	} else if (commandPositionX > width*.05 && commandPositionX < width*.25 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
 		box3 = true;
-	} else if (commandPositionX > width*.85 && commandPositionX < width*.95 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
+	} else if (commandPositionX > width*.75 && commandPositionX < width*.95 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
 		box4 = true;
 	}
 

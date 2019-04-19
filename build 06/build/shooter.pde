@@ -297,7 +297,6 @@ class Player{
 		} else if (health == 1) {
 			image(status01,width*.90,height/2,width*0.2,height*0.9);
 		}
-
 	}
 
 	void floatLeft(){

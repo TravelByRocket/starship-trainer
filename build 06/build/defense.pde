@@ -12,9 +12,16 @@ PImage asteroid01;
 PImage asteroid02;
 PImage asteroid03;
 
-ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
-ArrayList<Blast> blasts = new ArrayList<Blast>();
-ArrayList<ProgressMessage> progresses = new ArrayList<ProgressMessage>();
+ArrayList<Asteroid> asteroids;
+ArrayList<Blast> blasts;
+ArrayList<ProgressMessage> progresses;
+
+float planetCenterX;
+float planetCenterY;
+float planetRadius;
+
+int planetHealth = 10;
+int destroyCount = 0;
 
 void defenseIntro(){ //gameState 20
 	
@@ -44,6 +51,9 @@ void defenseTraining(){ // gameState 21
 	textAlign(CENTER,CENTER);
 
 	if (scene == 0){
+		asteroids = new ArrayList<Asteroid>();
+		blasts = new ArrayList<Blast>();
+		progresses = new ArrayList<ProgressMessage>();
 		asteroids.add(new Asteroid(width/2,height*2/5,"training"));
 		asteroids.add(new Asteroid(width/3,height*3/5,"training"));
 		asteroids.add(new Asteroid(width*2/3,height*3/5,"training"));
@@ -67,30 +77,57 @@ void defenseGame(){ //gameState 22
 
 	imageMode(CORNER);
 	image(defenseBackground,0,0,width,height);
+	int numActiveAsteroids = 10;
 
-	if (scene == 0){ // create on first loop
-		asteroids.add(new Asteroid(width*1/6,height*.3,.5,1.1));
-		asteroids.add(new Asteroid(width*2/6,height*.1,.55,.8));
-		asteroids.add(new Asteroid(width*3/6,height*.2,.4,.6));
-		asteroids.add(new Asteroid(width*4/6,height*.4,-.45,1.2));
-		asteroids.add(new Asteroid(width*5/6,height*.2,-.39,.7));
+	if (scene == 0){
+		asteroids = new ArrayList<Asteroid>();
+		blasts = new ArrayList<Blast>();
+		progresses = new ArrayList<ProgressMessage>();
+		for (int i = 0; i < numActiveAsteroids; i++){
+			asteroids.add(new Asteroid());
+		}
+		planetCenterX = width/2;
+		planetCenterY = height;
+		planetRadius = width*.4;
 		scene++;
+	} else if (scene == 1){
+		if (asteroids.size() < numActiveAsteroids){
+			asteroids.add(new Asteroid());
+		}
 	}
 
-	if (asteroids.size() == 0){
+	if (destroyCount >= 20){
 		gameState++;
 		scene = 0;
+	} else if (planetHealth <= 0) {
+		gameState = 61;
+		scene = 0;
 	}
+
+	textSize(22);
+	fill(gameOrange);
+	textAlign(LEFT,TOP);
+	text("Asteroids Destroyed:"+destroyCount+"of 20", 0, 0);
+
+	ellipseMode(CENTER);
+	strokeWeight(3);
+	stroke(gameRed);
+	noFill();
+	ellipse(planetCenterX, planetCenterY, planetRadius*2, planetRadius*2);
+
+	drawHealthBarPlanet(planetHealth);
 	itemHandling();
 	leapManager();
 }
 
 void defenseStory(){ //gameState 23
-	image(defensePost00,0,0,height,width);
-	defenseWin = true;
-	// miniGameWin();
-	gameState = 60;
-
+	if (scene == 0){
+		image(defensePost00,0,0,height,width);
+	} else if (scene == 1) {
+		defenseWin = true;
+		gameState = 60;
+		scene = 0;			
+	}
 }
 
 void userInputsDefense(){
@@ -101,8 +138,12 @@ void userInputsDefense(){
 			scene++;
 		} else if (gameState == 22) {
 			//no button needed
-		}	
-	}
+		} else if (gameState == 23) {
+			scene++;
+		}
+	} else if (keyCode == DOWN) {
+		planetHealth--;
+	} 
 	
 }
 
@@ -114,9 +155,7 @@ void leapOnCircleGesture(CircleGesture g, int leapState){
 				PVector positionCenter = g.getCenter();
 				float progress = g.getProgress();
 				if (progress > 0.99){
-					// blasts.add(new Blast());
 					blasts.add(new Blast(mapLeapX(positionCenter.x),mapLeapY(positionCenter.y)));
-					// progresses.add(new ProgressMessage("GOOD!"));
 				} else {
 					progresses.add(new ProgressMessage(round(progress*100),mapLeapX(positionCenter.x),mapLeapY(positionCenter.y)));
 				}
@@ -127,7 +166,6 @@ void leapOnCircleGesture(CircleGesture g, int leapState){
 }
 
 class Asteroid{
-	int type;
 	float posX;
 	float posY;
 	float velX;
@@ -141,17 +179,14 @@ class Asteroid{
 	float rotationOffset = 0;
 	float illumOffset;
 
-	// int rotation = random(0, TWO_PI);
 	Asteroid(){
-		type = (int) floor(random(0,3));
 		posX = random(width*0.2,width*0.8);
-		posY = random(height*0.1,height*0.7);
-		velX = 0;
-		velY = 0;
+		posY = random(-50,-300);
+		velX = random(-.5,.5);
+		velY = random(0.5,2);
 	}
 
 	Asteroid(float thePosX,float thePosY){
-		type = (int) floor(random(0,3));
 		posX = thePosX;
 		posY = thePosY;
 		velX = 0;
@@ -159,7 +194,6 @@ class Asteroid{
 	}
 
 	Asteroid(float thePosX,float thePosY,String theMode){
-		type = (int) floor(random(0,3));
 		posX = thePosX;
 		posY = thePosY;
 		velX = 0;
@@ -170,7 +204,6 @@ class Asteroid{
 	}
 
 	Asteroid(float thePosX,float thePosY, float theVelX, float theVelY){
-		type = (int) floor(random(0,3));
 		posX = thePosX;
 		posY = thePosY;
 		velX = theVelX;
@@ -181,13 +214,7 @@ class Asteroid{
 		imageMode(CENTER);
 		tint(255,255);
 		noFill();
-		if (type == 0){
-			image(asteroid01, posX, posY, width*0.06, width*0.06);
-		} else if (type == 1) {
-			image(asteroid02, posX, posY, width*0.06, width*0.06);
-		} else if (type == 2) {
-			image(asteroid03, posX, posY, width*0.06, width*0.06);
-		}
+		image(asteroid01, posX, posY, width*0.06, width*0.06);
 
 		if (mode == "training"){
 			ellipseMode(CENTER);
@@ -213,8 +240,16 @@ class Asteroid{
 		posX+= velX;
 		posY+= velY;
 
+		collisionCheck();
+
 	}
 
+	void collisionCheck(){
+		if (dist(planetCenterX,planetCenterY,posX,posY)<planetRadius){
+			destroyed = true;
+			planetHealth--;
+		}
+	}
 }
 
 class Blast{
@@ -244,6 +279,7 @@ class Blast{
 		for (Asteroid as : asteroids){
 			if (dist(posX, posY, as.posX, as.posY) < width*0.05){
 				as.destroyed = true;
+				destroyCount++;
 			}
 		}
 	}
@@ -302,11 +338,8 @@ void itemHandling(){
 	// ASTEROID HANDLING
 	for (int j = asteroids.size() - 1; j >= 0; j--) { // go backwards through ArrayList of asteroids
 	 	Asteroid as = asteroids.get(j); // get the missile at current index
-	 	if (as.destroyed) { // if it is expired
+	 	if (as.destroyed || as.posY > height || as.posX < 0 || as.posX > width) { // if it is expired
 	 		asteroids.remove(j); // then remove it from the ArrayList
-	 	} else if (as.posY>height){
-	 		gameState = 61;
-	 		scene = 0;
 	 	} else {
 	 		as.draw();
 	 	}
@@ -347,4 +380,29 @@ void loadDefenseImages(){
 
 	defenseBackground = loadImage("../../data/Planet Defense Blank Screen-01.png");
 	blast = loadImage("../../data/playerBlast.png");
+}
+
+void drawHealthBarPlanet(int theHealth){
+	imageMode(CENTER);
+	if (theHealth == 10) {
+		image(status10,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 9) {
+		image(status09,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 8) {
+		image(status08,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 7) {
+		image(status07,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 6) {
+		image(status06,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 5) {
+		image(status05,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 4) {
+		image(status04,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 3) {
+		image(status03,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 2) {
+		image(status02,width*.90,height/2,width*0.2,height*0.9);
+	} else if (theHealth == 1) {
+		image(status01,width*.90,height/2,width*0.2,height*0.9);
+	}
 }
