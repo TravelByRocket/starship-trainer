@@ -18,9 +18,9 @@ import de.voidplus.leapmotion.*;
 LeapMotion leap;
 
 // CHOOSE GAME DISPLAY MODE (select/deselect with comments)
-int gameMode = 0; // window, 1 screen
+// int gameMode = 0; // window, 1 screen
 // int gameMode = 1; // fullscreen, 1 screen
-// int gameMode = 2; // window, 1 screen, external monitor
+int gameMode = 2; // window, square, 1:1
 // int gameMode = 3; // 2 screen, span
 
 // DISPLAY DEBUGGING VISUAL GUIDES (select/deselect with comments)
@@ -62,13 +62,13 @@ void settings() {
 		case 0:
 			// size(1008,630,P3D);
 			float screenScale = 0.62;
-			size(int(floor(768*screenScale)),int(floor(1366*screenScale)),P3D);
+			size(int(floor(768*screenScale)),int(floor(768*screenScale)),P3D);
 			break;
 		case 1:
 			fullScreen();
 			break;
 		case 2:
-			size(800,600);
+			size(768,768,P3D);
 			break;
 		case 3:
 			fullScreen(SPAN);
@@ -277,4 +277,3 @@ void keyPressed() {
 		println("scene: "+scene);
 	}
 }
-

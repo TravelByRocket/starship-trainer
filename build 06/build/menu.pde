@@ -9,6 +9,10 @@ PImage attackLabel;
 PImage checkmark;
 PImage asteroid;
 
+PImage intro01;
+PImage intro01Success;
+PImage intro02;
+
 boolean box1 = false;
 boolean box2 = false;
 boolean box3 = false;
@@ -16,79 +20,72 @@ boolean box4 = false;
 
 void menuTraining(){ // gameState 10
 
-	leapManager();
+	imageMode(CORNERS);
+	if (!box1 || !box2 || !box3 || !box4){ // if at least one box is not yet triggered
+		image(intro01, 0, 0, width, height);
+	} else {
+		image(intro01Success, 0, 0, width, height);
+	}
 
 	noStroke();
 
 	rectMode(CORNERS);
 	if (box1) {
 		fill(gameGreen);
-		rect(width*.05,height*.05,width*.25,height*.15);
+		rect(width*.05,height*.05,width*.15,height*.15);
 	} else if (!box1) {
 		fill(gameOrange);
-		rect(width*.05,height*.05,width*.25,height*.15);
+		rect(width*.05,height*.05,width*.15,height*.15);
 	}
 
 	if (box2) {
 		fill(gameGreen);
-		rect(width*.75,height*.05,width*.95,height*.15);
+		rect(width*.85,height*.05,width*.95,height*.15);
 	} else if (!box2) {
 		fill(gameOrange);
-		rect(width*.75,height*.05,width*.95,height*.15);
+		rect(width*.85,height*.05,width*.95,height*.15);
 	}
 
 	if (box3) {
 		fill(gameGreen);
-		rect(width*.05,height*.85,width*.25,height*.95);
+		rect(width*.05,height*.85,width*.15,height*.95);
 	} else if (!box3) {
 		fill(gameOrange);
-		rect(width*.05,height*.85,width*.25,height*.95);
+		rect(width*.05,height*.85,width*.15,height*.95);
 	}
 
 	if (box4) {
 		fill(gameGreen);
-		rect(width*.75,height*.85,width*.95,height*.95);
+		rect(width*.85,height*.85,width*.95,height*.95);
 	} else if (!box4) {
 		fill(gameOrange);
-		rect(width*.75,height*.85,width*.95,height*.95);
+		rect(width*.85,height*.85,width*.95,height*.95);
 	}
 
-	if (commandPositionX > width*.05 && commandPositionX < width*.25 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
+	if (commandPositionX > width*.05 && commandPositionX < width*.15 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
 		box1 = true;
-	} else if (commandPositionX > width*.75 && commandPositionX < width*.95 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
+	} else if (commandPositionX > width*.85 && commandPositionX < width*.95 && commandPositionY > height*0.05 && commandPositionY < height*0.15){
 		box2 = true;
-	} else if (commandPositionX > width*.05 && commandPositionX < width*.25 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
+	} else if (commandPositionX > width*.05 && commandPositionX < width*.15 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
 		box3 = true;
-	} else if (commandPositionX > width*.75 && commandPositionX < width*.95 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
+	} else if (commandPositionX > width*.85 && commandPositionX < width*.95 && commandPositionY > height*0.85 && commandPositionY < height*0.95){
 		box4 = true;
 	}
 
-
-	if (!box1 || !box2 || !box3 || !box4){ // if at least one box is not yet triggered
-		textSize(18);
-		fill(255);
-		textAlign(CENTER,CENTER);
-		text("Move Hand\nLeft, Right, Up, and Down\nto Highlight Boxes", width/2, height/2);
-	} else {
-		textSize(18);
-		fill(255);
-		textAlign(CENTER,CENTER);
-		text("You got it!\nPress button to move on", width/2, height/2);
-		if (scene == 0){
-			scene++;
-		}
+	if (scene == 0) {
+		// run everything above
+	} else if (scene == 1) {
+		gameState++;
+		scene=0;
 	}
 
-
-	
+	leapManager();
 }
 
 void menuMain() { // gameState 11
 	
-	fill(255);
-	textSize(48);
-	textAlign(CENTER,BOTTOM);
-	text("Choose your training mission:", width/2, height/4);
+	imageMode(CORNERS);
+	image(intro02, 0, 0, width, height);
 
 	// MENU ITEMS (3 positions, Left-to-Right, 0-indexed)
 	menuItemDraw(0, asteroid, gameRed, defenseWin, defenseLabel);
@@ -198,7 +195,9 @@ void userInputsMenu(){
 			gameState++;
 		} else if (gameState == 12) {
 			//no button needed
-		}	
+		} else {
+			scene++;
+		}
 	}
 }
 
@@ -211,5 +210,8 @@ void loadMenuImages(){
 	asteroid = loadImage("../../data/planet defense icon.png");
 	rocket = loadImage("../../data/base attack icon.png");
 	spacecraft = loadImage("../../data/enemy encounter icon.png");
+	intro01 = loadImage("../../data/intro01.png");
+	intro02 = loadImage("../../data/intro02.png");
+	intro01Success = loadImage("../../data/intro01Success.png");
 		
 }

@@ -45,24 +45,11 @@ void finaleStory(){ // gameState 53
 		image(finalePost01,0,0,width,height);
 	} else if (scene == 1) {
 		resetGame();
-		// image(FinalePost01,0,0,width,height);
-	} else if (scene == 2) {
-		// image(FinalePost02,0,0,width,height);
-	} else {
-		// resetGame();
-	}
-
-	
+	}	
 }
 
 void userInputsFinale(){
-	if(gameState == 50){
-		scene++;
-	} else if (gameState == 51){
-		gameState++;
-	} else if (gameState == 52) {
-		gameState++;
-	} else if (gameState == 53) {
+	if (key == ' ') {
 		scene++;
 	}
 }

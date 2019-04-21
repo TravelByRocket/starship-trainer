@@ -9,8 +9,6 @@ PImage defensePost00;
 
 PImage defenseBackground;
 PImage asteroid01;
-PImage asteroid02;
-PImage asteroid03;
 
 ArrayList<Asteroid> asteroids;
 ArrayList<Blast> blasts;
@@ -77,7 +75,7 @@ void defenseGame(){ //gameState 22
 
 	imageMode(CORNER);
 	image(defenseBackground,0,0,width,height);
-	int numActiveAsteroids = 10;
+	int numActiveAsteroids = 5;
 
 	if (scene == 0){
 		asteroids = new ArrayList<Asteroid>();
@@ -89,6 +87,8 @@ void defenseGame(){ //gameState 22
 		planetCenterX = width/2;
 		planetCenterY = height;
 		planetRadius = width*.4;
+		planetHealth = 10;
+		destroyCount = 0;
 		scene++;
 	} else if (scene == 1){
 		if (asteroids.size() < numActiveAsteroids){
@@ -96,7 +96,7 @@ void defenseGame(){ //gameState 22
 		}
 	}
 
-	if (destroyCount >= 20){
+	if (destroyCount >= 12){
 		gameState++;
 		scene = 0;
 	} else if (planetHealth <= 0) {
@@ -107,7 +107,7 @@ void defenseGame(){ //gameState 22
 	textSize(22);
 	fill(gameOrange);
 	textAlign(LEFT,TOP);
-	text("Asteroids Destroyed:"+destroyCount+"of 20", 0, 0);
+	text("Asteroids Destroyed:"+destroyCount+"of 12", 0, 0);
 
 	ellipseMode(CENTER);
 	strokeWeight(3);
@@ -121,6 +121,7 @@ void defenseGame(){ //gameState 22
 }
 
 void defenseStory(){ //gameState 23
+	imageMode(CORNERS);
 	if (scene == 0){
 		image(defensePost00,0,0,height,width);
 	} else if (scene == 1) {
@@ -277,7 +278,7 @@ class Blast{
 			expired = true;
 		}
 		for (Asteroid as : asteroids){
-			if (dist(posX, posY, as.posX, as.posY) < width*0.05){
+			if (dist(posX, posY, as.posX, as.posY) < width*0.1){
 				as.destroyed = true;
 				destroyCount++;
 			}
@@ -369,8 +370,6 @@ void itemHandling(){
 
 void loadDefenseImages(){
 	asteroid01 = loadImage("../../data/asteroid01.png");
-	asteroid02 = loadImage("../../data/asteroid02.png");
-	asteroid03 = loadImage("../../data/asteroid03.png");
 
 	defensePre00 = loadImage("../../data/defensePre00.png");
 	defensePre01 = loadImage("../../data/defensePre01.png");

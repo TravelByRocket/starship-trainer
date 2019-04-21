@@ -76,7 +76,7 @@ void shooterTraining(){ // gameState 31
 	if (rect2) {
 		fill(gameGreen);
 		rect(width*.7,height*.85,width*.9,height*.95);
-	} else if (!box2) {
+	} else if (!rect2) {
 		fill(gameOrange);
 		rect(width*.7,height*.85,width*.9,height*.95);
 	}
@@ -133,7 +133,7 @@ void shooterGame(){ //gameState 32
 		startupShooter = false; //don't run these initializations again
 	}
 
-	leapInputsShooter();
+	
 	player.draw();
 	
 	// ENEMY DESTRUCTION
@@ -191,7 +191,12 @@ void shooterGame(){ //gameState 32
 		gameState++;
 		shooterWin = true;
 	}
+	 if (player.health == 0){
+	 	gameState = 61;
+	 	scene = 0;
+	 }
 
+	leapInputsShooter();
 }
 
 void shooterStory(){ //gameState 33
@@ -202,8 +207,6 @@ void shooterStory(){ //gameState 33
 		scene = 0;
 		gameState = 60;
 	}
-	
-	// miniGameWin();
 }
 
 void userInputsShooter(){ //better to call userKeysShooter?

@@ -1,25 +1,41 @@
 // gameState range 40-49
 
 PImage attackPost00;
+PImage attackPre00;
+PImage attackPre01;
+PImage attackPre02;
+PImage attackPre03;
 
 boolean circs1 = false;
 boolean circs2 = false;
 boolean circs3 = false;
 boolean circs4 = false;
 
+PShape spacecraft3d;
+
 float trainingCircleRadius = width*2;
 
-void attackIntro(){ // gameState 40
-	tint(255);
-	textAlign(CENTER,CENTER);
-	textSize(18);
-	text("Learn how to play. Press SPACE.", width/2, height/2);
+ArrayList<Ring> rings;
+ArrayList<Barrier> barriers;
 
+void attackIntro(){ // gameState 40
+	
+	imageMode(CORNERS);
+	if (scene == 0) {
+		image(attackPre00, 0, 0, width, height);
+	} else if (scene == 1){
+		image(attackPre01, 0, 0, width, height);
+	} else if (scene == 2){
+		image(attackPre02, 0, 0, width, height);
+	} else if (scene == 3){
+		image(attackPre03, 0, 0, width, height);
+	} else if (scene == 4) {
+		gameState++;
+		scene = 0;
+	}
 }
 
 void attackTraining(){ // gameState 41
-	// imageMode(CORNER);
-	// image(bgStars,0,0,width,height);
 
 	leapManager();
 
@@ -80,22 +96,20 @@ void attackTraining(){ // gameState 41
 		circs4 = true;
 	}
 
-	if (!circs1 || !circs2 || !circs3 || !circs4){ // if at least one box is not yet triggered
+	if (scene == 0){
 		textSize(18);
 		fill(255);
 		textAlign(CENTER,CENTER);
-		text("Roll hand\nCW and CCW\nto Highlight Circles", width/2, height/4);
-	} else {
-		textSize(18);
-		fill(255);
-		textAlign(CENTER,CENTER);
-		text("You got it!\nPress button to move on", width/2, height/4);
-		if (scene == 0){
-			scene++;
+		if (circs1 && circs2 && circs3 && circs4){
+			text("You got it!\nPress button to move on", width/2, height/4);
+		} else {
+			text("Roll hand\nCW and CCW\nto Highlight Circles", width/2, height/4);	
 		}
-	}
-
-	if (scene == 2){
+	} else if (scene == 1) {
+		circs1 = false;
+		circs2 = false;
+		circs3 = false;
+		circs4 = false;
 		gameState++;
 		scene = 0;
 	}
@@ -104,57 +118,52 @@ void attackTraining(){ // gameState 41
 void attackGame(){ // gameState 42
 
 	lights();
-	stroke(255);
-	noFill();
-	curve(0, -3000,    0, 0, height/2,    0, width, height/2,    0, width, -3000, 0);
-	curve(0, -3000, -100, 0, height/2, -100, width, height/2, -100, width, -3000, -100);
-	curve(0, -3000, -200, 0, height/2, -200, width, height/2, -200, width, -3000, -200);
-	curve(0, -3000, -300, 0, height/2, -300, width, height/2, -300, width, -3000, -300);
-	curve(0, -3000, -400, 0, height/2, -400, width, height/2, -400, width, -3000, -400);
-	curve(0, -3000, -500, 0, height/2, -500, width, height/2, -500, width, -3000, -500);
-	curve(0, -3000, -600, 0, height/2, -600, width, height/2, -600, width, -3000, -600);
-	curve(0, -3000, -700, 0, height/2, -700, width, height/2, -700, width, -3000, -700);
 	
-	// curve(width/4, height/2, -200, width/2, height, -200, width*3/4, height/2, -200, width/2,0,-200);
-	// curve(width/4, height/2, -300, width/2, height, -300, width*3/4, height/2, -300, width/2,0,-300);
-	// curve(width/4, height/2, -400, width/2, height, -400, width*3/4, height/2, -400, width/2,0,-400);
-	// curve(width/4, height/2, -500, width/2, height, -500, width*3/4, height/2, -500, width/2,0,-500);
-	// curve(width/4, height/2, -600, width/2, height, -600, width*3/4, height/2, -600, width/2,0,-600);
-	stroke(250, 0, 0);
-	curve(0, -3000, -1000, 0, height/2, -1000, width, height/2, -1000, width, -3000, -1000);
-	// curve(width/4, height/2, -700, width/2, height, -700, width*3/4, height/2, -700, width/2,0,0);
-	
+	// add and place spacecraft
 	pushMatrix();
-	translate(width/2+400*cos(radians(handRoll+90)), height*4/5+400*sin(radians(handRoll+90)), -400);
-	rotate(radians(handRoll));
-	noStroke();
-	fill(100);
-	box(width/15,width/30,width/10);
+	translate(width/2, height*3/4, 0);
+	rotateZ(PI+radians(handRoll));
+	rotateY(PI);
+	shape(spacecraft3d,0,-80,width*2/3,width/10);
 	popMatrix();
 
+	if (scene == 0){
+		rings = new ArrayList<Ring>();
+		barriers = new ArrayList<Barrier>();
+		scene++;
+	} else if (scene == 1){
+		if (frameCount%15 == 0){
+			rings.add(new Ring());
+		}
+
+		if (frameCount%90 == 0){
+			barriers.add(new Barrier());
+		}
+	} else if (scene == 2) {
+		gameState++;
+		scene = 0;
+	}
+	
+	itemHandlingAttack();
 	leapManager();
-
-
 }
 
 void attackStory(){ // // gameState 43
-	textAlign(CENTER,CENTER);
-	text("Attack Game Win", width/2, height/2);
-	attackWin = true;
-	// miniGameWin();
-	gameState = 60;
+	
+	imageMode(CORNERS);
+	if (scene == 0){
+		image(attackPost00, 0, 0, width, height);
+		attackWin = true;
+	} else if (scene == 1) {
+		gameState = 60;
+		scene = 0;	
+	}
 }
 
 void userInputsAttack(){
 	
 	if (key == ' ') {
-		if(gameState == 40){
-			gameState++;
-		} else if (gameState == 41){
-			scene++;
-		} else if (gameState == 42) {
-			gameState++;
-		}
+		scene++;
 	}
 	
 }
@@ -166,4 +175,111 @@ void leapInputsAttack(){ //better to call userLeapShooter?
 
 void loadAttackImages(){
 	attackPost00 = loadImage("../../data/attackPost00.png");
+	attackPre00 = loadImage("../../data/attackPre00.png");
+	attackPre01 = loadImage("../../data/attackPre01.png");
+	attackPre02 = loadImage("../../data/attackPre02.png");
+	attackPre03 = loadImage("../../data/attackPre03.png");
+	spacecraft3d = loadShape("../../data/spacecraft.obj");
+}
+
+class Ring{
+	float startingDepth = -2000; // more negative is into the distance
+	float radius = width/2;
+	float centerX = width/2;
+	float centerY = height*3/4;
+	float posZ = startingDepth;
+	boolean expired = false;
+	float velZ = 20;
+	int fader;
+
+	Ring(){
+		fader = 0;
+	}
+
+	Ring(float thePosZ){
+		posZ = thePosZ;
+		fader = 0;
+	}
+
+	void draw(){
+		// background(0);
+		ellipseMode(CENTER);
+		pushMatrix();
+		translate(0, 0, posZ);
+		noFill();
+		stroke(fader);
+		ellipse(centerX, centerY, radius*2, radius*2);
+		popMatrix();
+		posZ += velZ;
+		if (posZ > 1000){
+			expired = true;
+		}
+
+		fader += 1;
+		if (fader > 100){
+			fader = 100;
+		}
+		
+	}
+}
+
+class Barrier{
+	float startingDepth = -2000; // more negative is into the distance
+	float radius = width/2;
+	float centerX = width/2;
+	float centerY = height*3/4;
+	float posZ = startingDepth;
+	boolean expired = false;
+	float velZ = 20;
+	int fader;
+	float rotation = random(-50,50);
+
+	Barrier(){
+		fader = 0;
+	}
+
+	Barrier(float thePosZ){
+		posZ = thePosZ;
+		fader = 0;
+	}
+
+	void draw(){
+		ellipseMode(CENTER);
+		pushMatrix();
+		translate(0, 0, posZ);
+		noStroke();
+		fill(fader);
+		arc(centerX, centerY, radius*2, radius*2,radians(rotation+10),radians(rotation+180-10),CHORD);
+		popMatrix();
+		posZ += velZ;
+		if (posZ > 1000){
+			expired = true;
+		}
+
+		fader += 1;
+		if (fader > 100){
+			fader = 100;
+		}
+		
+	}
+}
+
+void itemHandlingAttack(){
+	for (int i = rings.size() - 1; i >= 0; i--) { // go backwards through ArrayList of blasts
+	 	Ring ri = rings.get(i); // get the missile at current index
+	 	if (ri.expired) { // if it is expired
+	 		rings.remove(i); // then remove it from the ArrayList
+	 	} else {
+	 		ri.draw();
+	 	}
+	}
+
+	for (int i = barriers.size() - 1; i >= 0; i--) { // go backwards through ArrayList of blasts
+	 	Barrier ba = barriers.get(i); // get the missile at current index
+	 	if (ba.expired) { // if it is expired
+	 		barriers.remove(i); // then remove it from the ArrayList
+	 	} else {
+	 		ba.draw();
+	 	}
+	}
 }
