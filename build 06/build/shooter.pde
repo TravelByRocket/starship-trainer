@@ -1,15 +1,15 @@
 // gameState range 30-39
 
-PImage status10;
-PImage status09;
-PImage status08;
-PImage status07;
-PImage status06;
-PImage status05;
-PImage status04;
-PImage status03;
-PImage status02;
-PImage status01;
+PImage statusShip10;
+PImage statusShip09;
+PImage statusShip08;
+PImage statusShip07;
+PImage statusShip06;
+PImage statusShip05;
+PImage statusShip04;
+PImage statusShip03;
+PImage statusShip02;
+PImage statusShip01;
 
 PImage fighter;
 PImage fighterFire;
@@ -290,27 +290,28 @@ class Player{
 	}
 
 	void drawHealthBar(){
-		if (health == 10) {
-			placeMenuImage(status10);
-		} else if (health == 9) {
-			placeMenuImage(status09);
+		if (health == 9) {
+			placeMenuImage(statusShip10);
 		} else if (health == 8) {
-			placeMenuImage(status08);
+			placeMenuImage(statusShip09);
 		} else if (health == 7) {
-			placeMenuImage(status07);
+			placeMenuImage(statusShip08);
 		} else if (health == 6) {
-			placeMenuImage(status06);
+			placeMenuImage(statusShip07);
 		} else if (health == 5) {
-			placeMenuImage(status05);
+			placeMenuImage(statusShip06);
 		} else if (health == 4) {
-			placeMenuImage(status04);
+			placeMenuImage(statusShip05);
 		} else if (health == 3) {
-			placeMenuImage(status03);
+			placeMenuImage(statusShip04);
 		} else if (health == 2) {
-			placeMenuImage(status02);
+			placeMenuImage(statusShip03);
 		} else if (health == 1) {
-			placeMenuImage(status01);
-		}
+			placeMenuImage(statusShip02);
+		} 
+		// else if (health == 1) {
+		// 	placeMenuImage(statusShip01);
+		// }
 	}
 
 	void floatLeft(){
@@ -410,16 +411,16 @@ class Enemy{
 }
 
 void loadShooterImages(){
-	status10 = requestImage("../../data/lifeStatus/status10.png");
-	status09 = requestImage("../../data/lifeStatus/status09.png");
-	status08 = requestImage("../../data/lifeStatus/status08.png");
-	status07 = requestImage("../../data/lifeStatus/status07.png");
-	status06 = requestImage("../../data/lifeStatus/status06.png");
-	status05 = requestImage("../../data/lifeStatus/status05.png");
-	status04 = requestImage("../../data/lifeStatus/status04.png");
-	status03 = requestImage("../../data/lifeStatus/status03.png");
-	status02 = requestImage("../../data/lifeStatus/status02.png");
-	status01 = requestImage("../../data/lifeStatus/status01.png");
+	statusShip10 = requestImage("../../data/lifeStatus/statusShip10.png");
+	statusShip09 = requestImage("../../data/lifeStatus/statusShip09.png");
+	statusShip08 = requestImage("../../data/lifeStatus/statusShip08.png");
+	statusShip07 = requestImage("../../data/lifeStatus/statusShip07.png");
+	statusShip06 = requestImage("../../data/lifeStatus/statusShip06.png");
+	statusShip05 = requestImage("../../data/lifeStatus/statusShip05.png");
+	statusShip04 = requestImage("../../data/lifeStatus/statusShip04.png");
+	statusShip03 = requestImage("../../data/lifeStatus/statusShip03.png");
+	statusShip02 = requestImage("../../data/lifeStatus/statusShip02.png");
+	// status01 = requestImage("../../data/lifeStatus/statusShip01.png");
 
 	enemy = requestImage("../../data/enemy.png");
 	enemyFire = requestImage("../../data/enemyFire.png");
