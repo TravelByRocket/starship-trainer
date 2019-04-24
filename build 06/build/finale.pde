@@ -7,6 +7,7 @@ PImage finalePostSuccess00;
 PImage finalePostSuccess01;
 PImage finalePostSuccess02;
 PImage finalePostSuccess03;
+PImage endCredits;
 
 void finaleIntro(){ //gameState 50
 	if (scene == 0) {
@@ -44,6 +45,8 @@ void finaleStory(){ // gameState 53
 	} else if (scene == 2) {
 		placeMenuImage(finalePostSuccess03);
 	} else if (scene == 3) {
+		placeMenuImage(endCredits);
+	} else if (scene == 4) {
 		resetGame();
 	}
 }
@@ -62,4 +65,5 @@ void loadFinaleImages(){
 	finalePostSuccess01 = requestImage("../../data/finalePostSuccess01.png");
 	finalePostSuccess02 = requestImage("../../data/finalePostSuccess02.png");
 	finalePostSuccess03 = requestImage("../../data/finalePostSuccess03.png");
+	endCredits = requestImage("../../data/endCredits.png");
 }

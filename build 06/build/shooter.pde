@@ -19,8 +19,8 @@ PImage enemyFire;
 PImage shooterPre00;
 PImage shooterPre01;
 PImage shooterPre02;
-PImage shooterPre03;
-PImage shooterPre04;
+// PImage shooterPre03;/
+// PImage shooterPre04;
 PImage shooterPre05;
 PImage shooterPost00;
 
@@ -50,11 +50,13 @@ void shooterIntro(){ //gameState 30
 			placeMenuImage(shooterPre01);
 		} else if (animationScreen == 1) {
 			placeMenuImage(shooterPre02);
-		} else if (animationScreen == 2) {
-			placeMenuImage(shooterPre03);
-		} else if (animationScreen == 3) {
-			placeMenuImage(shooterPre04);
-		} else {
+		} 
+		// else if (animationScreen == 2) {
+		// 	placeMenuImage(shooterPre03);
+		// } else if (animationScreen == 3) {
+		// 	placeMenuImage(shooterPre04);
+		// } 
+		else {
 			animationScreen = 0;
 		}
 	} else if (scene == 2) {
@@ -270,7 +272,7 @@ float missileSize = width/2;
 float craftSize = width/2;
 
 class Player{
-	int health = 10;
+	int health = 9;
 	float posX = width/2;
 	float posY = height*0.9;
 	float leapFloatSpeed = width/80;
@@ -430,8 +432,8 @@ void loadShooterImages(){
 	shooterPre00 = requestImage("../../data/shooterPre00.png");
 	shooterPre01 = requestImage("../../data/shooterPre01.png");
 	shooterPre02 = requestImage("../../data/shooterPre02.png");
-	shooterPre03 = requestImage("../../data/shooterPre03.png");
-	shooterPre04 = requestImage("../../data/shooterPre04.png");
+	// shooterPre03 = requestImage("../../data/shooterPre03.png");
+	// shooterPre04 = requestImage("../../data/shooterPre04.png");
 	shooterPre05 = requestImage("../../data/shooterPre05.png");
 	shooterPost00 = requestImage("../../data/shooterPost00.png");
 

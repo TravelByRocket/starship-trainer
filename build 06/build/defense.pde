@@ -14,6 +14,7 @@ PImage defensePost00;
 
 PImage defenseBackground;
 PImage asteroid01;
+PImage asteroid02;
 
 ArrayList<Asteroid> asteroids;
 ArrayList<Blast> blasts;
@@ -23,7 +24,7 @@ float planetCenterX;
 float planetCenterY;
 float planetRadius;
 
-int planetHealth = 10;
+int planetHealth = 9;
 int destroyCount = 0;
 
 PImage statusPlanet10;
@@ -114,8 +115,8 @@ void defenseGame(){ //gameState 22
 		}
 		planetCenterX = width/2;
 		planetCenterY = height;
-		planetRadius = width*.35;
-		planetHealth = 10;
+		planetRadius = width*.45;
+		planetHealth = 9;
 		destroyCount = 0;
 		scene++;
 	} else if (scene == 1){
@@ -139,7 +140,7 @@ void defenseGame(){ //gameState 22
 
 	ellipseMode(CENTER);
 	strokeWeight(3);
-	stroke(gameRed);
+	stroke(gameGreen);
 	noFill();
 	ellipse(planetCenterX, planetCenterY, planetRadius*2, planetRadius*2);
 
@@ -206,6 +207,7 @@ class Asteroid{
 	float spinSpeedFactor = 0.4; // 1 -> 2.8 rev/sec; 0.5 -> 1.4 rev/sec
 	float rotationOffset = 0;
 	float illumOffset;
+	int visualType = int(floor(random(0, 2)));
 
 	Asteroid(){
 		posX = random(width*0.2,width*0.8);
@@ -242,8 +244,12 @@ class Asteroid{
 		imageMode(CENTER);
 		tint(255,255);
 		noFill();
-		image(asteroid01, posX, posY, width*0.06, width*0.06);
-
+		if (visualType == 0){
+			image(asteroid01, posX, posY, width*0.06, width*0.06);
+		} else if (visualType == 1) {
+			image(asteroid02, posX, posY, width*0.06, width*0.06);
+		}
+		
 		if (mode == "training"){
 			ellipseMode(CENTER);
 			if ((millis() + illumOffset) % 2000 < 1000){
@@ -397,6 +403,7 @@ void itemHandling(){
 
 void loadDefenseImages(){
 	asteroid01 = requestImage("../../data/asteroid01.png");
+	asteroid02 = requestImage("../../data/asteroid02.png");
 
 	defensePre00 = requestImage("../../data/defensePre00.png");
 	defensePre01 = requestImage("../../data/defensePre01.png");
@@ -409,18 +416,18 @@ void loadDefenseImages(){
 	defensePre08 = requestImage("../../data/defensePre08.png");
 	defensePost00 = requestImage("../../data/defensePost00.png");
 
-	defenseBackground = requestImage("../../data/Planet Defense Blank Screen-01.png");
+	defenseBackground = requestImage("../../data/Planet Defense Blank Background-01.png");
 	blast = requestImage("../../data/playerBlast.png");
 
-	statusPlanet10 = requestImage("../../data/statusPlanet10.png");
-	statusPlanet09 = requestImage("../../data/statusPlanet09.png");
-	statusPlanet08 = requestImage("../../data/statusPlanet08.png");
-	statusPlanet07 = requestImage("../../data/statusPlanet07.png");
-	statusPlanet06 = requestImage("../../data/statusPlanet06.png");
-	statusPlanet05 = requestImage("../../data/statusPlanet05.png");
-	statusPlanet04 = requestImage("../../data/statusPlanet04.png");
-	statusPlanet03 = requestImage("../../data/statusPlanet03.png");
-	statusPlanet02 = requestImage("../../data/statusPlanet02.png");
+	statusPlanet10 = requestImage("../../data/lifeStatus/statusPlanet10.png");
+	statusPlanet09 = requestImage("../../data/lifeStatus/statusPlanet09.png");
+	statusPlanet08 = requestImage("../../data/lifeStatus/statusPlanet08.png");
+	statusPlanet07 = requestImage("../../data/lifeStatus/statusPlanet07.png");
+	statusPlanet06 = requestImage("../../data/lifeStatus/statusPlanet06.png");
+	statusPlanet05 = requestImage("../../data/lifeStatus/statusPlanet05.png");
+	statusPlanet04 = requestImage("../../data/lifeStatus/statusPlanet04.png");
+	statusPlanet03 = requestImage("../../data/lifeStatus/statusPlanet03.png");
+	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet02.png");
 }
 
 void drawHealthBarPlanet(int theHealth){
