@@ -19,9 +19,10 @@ LeapMotion leap;
 
 // CHOOSE GAME DISPLAY MODE (select/deselect with comments)
 // int gameMode = 0; // window, 1 screen
-// int gameMode = 1; // fullscreen, 1 screen
-int gameMode = 2; // window, square, 1:1
+int gameMode = 1; // fullscreen, 1 screen
+// int gameMode = 2; // window, square, 1:1
 // int gameMode = 3; // 2 screen, span
+// int gameMode = 4; // 1 screen, 1 window, split window
 
 // DISPLAY DEBUGGING VISUAL GUIDES (select/deselect with comments)
 boolean planMode = true; // DO display guides
@@ -29,9 +30,7 @@ boolean planMode = true; // DO display guides
 
 // IMAGES (must be loaded in SETUP)
 
-PImage missionSuccess;
 PImage missionFail;
-PImage bgStars;
 PImage firstPost00;
 PImage firstPost01;
 PImage secondPost00;
@@ -43,7 +42,7 @@ color gamePink = #FF7BAC;
 color gameRed = #FF1D25;
 color gameGreen = #43C93E;
 color gameWhite = color(255);
-color gameInactiveGray = (100);
+color gameInactiveGray = color(100);
 
 // STATE VARIABLES
 int gameState = 0; // which phase is current, like intro, game 1, game 2, ending, etc
@@ -52,12 +51,27 @@ int scene = 0; // use to move between single steps within gameState
 
 int gameStateSelection = 10; // hold the selected game value to be called on click
 // (abve) default to 10 prevent game restart before mouse move on menu screen
-// int gameTime; // increments every time the game function in called
+// gameTime; // increments every time the game function in called
 boolean defenseWin = false;
 boolean shooterWin = false;
 boolean attackWin = false;
 
+int gHeightWindow; // game window height
+int gWidthWindow; // game window width
+int bHeightWindow; // background window height
+int bWidthWindow; // background window width
+int gHeightScreen; // game screen height
+int gWidthScreen; // game screen width
+int bHeightScreen; // background screen height
+int bWidthScreen; // background screen width
+
+int smallestDimension;
+
+boolean peppersGhostOrientation = false;
+// boolean peppersGhostOrientation = true;
+
 void settings() {
+	// pixelDensity(1);
 	switch(gameMode) {
 		case 0:
 			// size(1008,630,P3D);
@@ -65,7 +79,17 @@ void settings() {
 			size(int(floor(768*screenScale)),int(floor(768*screenScale)),P3D);
 			break;
 		case 1:
-			fullScreen();
+			fullScreen(P3D);
+			// surface.setSize(700,700);
+			smallestDimension = min(width,height);
+			gHeightWindow = 700; // game window height
+			gWidthWindow = 700; // game window width
+			bHeightWindow = 700; // background window height
+			bWidthWindow = 700; // background window width
+			// gHeightScreen = height; // game screen height
+			// gWidthScreen = width; // game screen width
+			// bHeightScreen = height; // background screen height
+			// bWidthScreen = width; // background screen width
 			break;
 		case 2:
 			size(768,768,P3D);
@@ -73,20 +97,32 @@ void settings() {
 		case 3:
 			fullScreen(SPAN);
 			break;
+		case 4:
+			size(500, 700, P3D);
+			smallestDimension = min(width,height);
+			gHeightWindow = smallestDimension; // game window height
+			gWidthWindow = smallestDimension; // game window width
+			bHeightWindow = smallestDimension; // background window height
+			bWidthWindow = smallestDimension; // background window width
+			gHeightScreen = smallestDimension; // game screen height
+			gWidthScreen = smallestDimension; // game screen width
+			bHeightScreen = smallestDimension; // background screen height
+			bWidthScreen = smallestDimension; // background screen width
+			break;
 	}
 }
 
 void setup() {
 	leap = new LeapMotion(this).allowGestures("circle");
 
+
+
 	// IMAGES
-	missionSuccess = loadImage("../../data/missionSuccess.png");
-	missionFail = loadImage("../../data/missionFail.png");
-	bgStars = loadImage("../../data/background.png");
-	firstPost00 = loadImage("../../data/firstPost00.png");
-	firstPost01 = loadImage("../../data/firstPost01.png");
-	secondPost00 = loadImage("../../data/secondPost00.png");
-	secondPost01 = loadImage("../../data/secondPost01.png");
+	missionFail = requestImage("../../data/missionFail.png");
+	firstPost00 = requestImage("../../data/firstPost00.png");
+	firstPost01 = requestImage("../../data/firstPost01.png");
+	secondPost00 = requestImage("../../data/secondPost00.png");
+	secondPost01 = requestImage("../../data/secondPost01.png");
 
 	loadIntroImages();
 	loadMenuImages();
@@ -99,6 +135,18 @@ void setup() {
 }
 
 void draw() {
+	// println("width: "+width);
+	// println("height: "+height);
+	surface.setSize(700,700);
+	surface.setLocation(370,50);
+
+	if (peppersGhostOrientation){
+		pushMatrix();
+		// rotate(PI/4);
+		scale(1,-1,1);
+		translate(0, -height, 0);
+	}
+
 	background(0); // draw a black backround all the time
 
 	switch(gameState) {
@@ -176,13 +224,16 @@ void draw() {
 		fill(255,0,0);
 		text("PLANNING MODE "+str(round(frameRate))+" fps", 10, height);
 	}
+
+	if (peppersGhostOrientation){
+		popMatrix();
+	}
 }
 
 int numGameWins = 0;
 
 void miniGameWin(){ //gamestate 60
 
-	imageMode(CORNERS);
 	if (scene == 0){
 		numGameWins++;
 		scene++;
@@ -190,18 +241,18 @@ void miniGameWin(){ //gamestate 60
 
 	if (numGameWins == 1) {
 		if (scene == 1) {
-			image(firstPost00, 0, 0, width, height);
+			placeMenuImage(firstPost00);
 		} else if (scene == 2) {
-			image(firstPost01, 0, 0, width, height);
+			placeMenuImage(firstPost01);
 		} else if (scene == 3) {
 			scene = 0;
 			gameState = 11;
 		}
 	} else if (numGameWins == 2) {
 		if (scene == 1) {
-			image(secondPost00, 0, 0, width, height);
+			placeMenuImage(secondPost00);
 		} else if (scene == 2) {
-			image(secondPost01, 0, 0, width, height);
+			placeMenuImage(secondPost01);
 		} else if (scene == 3) {
 			scene = 0;
 			gameState = 11;
@@ -213,9 +264,8 @@ void miniGameWin(){ //gamestate 60
 }
 
 void miniGameLoss(){ //gamestate 61
-	imageMode(CORNERS);
 	if (scene == 0) {
-		image(missionFail, 0, 0, width, height);
+		placeMenuImage(missionFail);
 	} else if (scene == 1) {
 		gameState = 11;
 		scene = 0;
@@ -276,4 +326,15 @@ void keyPressed() {
 		println("gameState: "+gameState);
 		println("scene: "+scene);
 	}
+}
+
+void drawBackground(){
+
+}
+
+void placeMenuImage(PImage theImage){
+	tint(255,255);
+	imageMode(CENTER);
+	// image(theImage, gWidthScreen/2, gHeightScreen/2, gWidthWindow, gHeightWindow);
+	image(theImage, gWidthWindow/2, gHeightWindow/2, gWidthWindow, gHeightWindow);
 }

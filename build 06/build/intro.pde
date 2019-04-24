@@ -3,11 +3,9 @@
 PImage intro00;
 
 void introMain() {
-	
-	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(intro00,0,0,width,height);
+		placeMenuImage(intro00);
 	} else {
 		gameState = 10;
 		scene = 0;

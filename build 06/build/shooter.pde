@@ -20,6 +20,8 @@ PImage shooterPre00;
 PImage shooterPre01;
 PImage shooterPre02;
 PImage shooterPre03;
+PImage shooterPre04;
+PImage shooterPre05;
 PImage shooterPost00;
 
 boolean startupShooter; // turns off after first/initialization loop
@@ -30,19 +32,33 @@ ArrayList<Enemy> enemies;
 boolean rect1 = false;
 boolean rect2 = false;
 
+int animationScreen = 0;
+
 void shooterIntro(){ //gameState 30
 	tint(255);
 
 	imageMode(CORNER);
 
 	if (scene == 0) {
-		image(shooterPre00,0,0,width,height);
+		placeMenuImage(shooterPre00);
+		animationScreen = 0;
 	} else if (scene == 1) {
-		image(shooterPre01,0,0,width,height);
+		if (frameCount % 50 == 0){
+			animationScreen++;
+		}
+		if (animationScreen == 0){
+			placeMenuImage(shooterPre01);
+		} else if (animationScreen == 1) {
+			placeMenuImage(shooterPre02);
+		} else if (animationScreen == 2) {
+			placeMenuImage(shooterPre03);
+		} else if (animationScreen == 3) {
+			placeMenuImage(shooterPre04);
+		} else {
+			animationScreen = 0;
+		}
 	} else if (scene == 2) {
-		image(shooterPre02,0,0,width,height);
-	} else if (scene == 3) {
-		image(shooterPre03,0,0,width,height);
+		placeMenuImage(shooterPre05);
 	} else {
 		gameState++;
 		scene = 0;
@@ -51,8 +67,6 @@ void shooterIntro(){ //gameState 30
 }
 
 void shooterTraining(){ // gameState 31
-	imageMode(CORNER);
-	image(bgStars,0,0,width,height);
 
 	if (startupShooter){ // create on first loop 
 		player = new Player();
@@ -88,17 +102,17 @@ void shooterTraining(){ // gameState 31
 	}
 
 	if (!rect1 || !rect2){ // if at least one box is not yet triggered
-		textSize(18);
+		textSize(24);
 		fill(255);
 		textAlign(CENTER,CENTER);
 		text("Move Hand\nLeft and Right\nto Move Craft", width/2, height/2);
 	} else if (rect1 && rect2 && scene == 0){
-		textSize(18);
+		textSize(24);
 		fill(255);
 		textAlign(CENTER,CENTER);
 		text("Press button to fire", width/2, height/2);
 	} else if (rect1 && rect2 && scene == 1){
-		textSize(18);
+		textSize(24);
 		fill(255);
 		textAlign(CENTER,CENTER);
 		text("You got it!\nPress button to play!", width/2, height/2);
@@ -119,15 +133,13 @@ void shooterTraining(){ // gameState 31
 }
 
 void shooterGame(){ //gameState 32
-	imageMode(CORNER);
-	image(bgStars,0,0,width,height);
 	
 	if (startupShooter){ // create on first loop 
 		player = new Player();
 		missilesPlayer = new ArrayList<MissilePlayer>();
 		missilesEnemy = new ArrayList<MissileEnemy>();
 		enemies = new ArrayList<Enemy>();
-		for (int k = 0; k < 5; k++){
+		for (int k = 0; k < 15; k++){
 			enemies.add(new Enemy());
 		}
 		startupShooter = false; //don't run these initializations again
@@ -200,9 +212,9 @@ void shooterGame(){ //gameState 32
 }
 
 void shooterStory(){ //gameState 33
-	imageMode(CORNERS);
+
 	if (scene == 0){
-		image(shooterPost00,0,0,width,height);
+		placeMenuImage(shooterPost00);
 	} else if (scene == 1) {
 		scene = 0;
 		gameState = 60;
@@ -213,9 +225,9 @@ void userInputsShooter(){ //better to call userKeysShooter?
 	if (key == ' ') {
 		if(gameState == 32){
 			missilesPlayer.add(new MissilePlayer());
-			for (Enemy en : enemies){
-				missilesEnemy.add(new MissileEnemy(en.posX,en.posY));
-			}
+			// for (Enemy en : enemies){
+			// 	missilesEnemy.add(new MissileEnemy(en.posX,en.posY));
+			// }
 		} else if (gameState == 30){
 			scene++;
 		} else if (gameState == 31 && scene == 0){
@@ -278,27 +290,26 @@ class Player{
 	}
 
 	void drawHealthBar(){
-		imageMode(CENTER);
 		if (health == 10) {
-			image(status10,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status10);
 		} else if (health == 9) {
-			image(status09,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status09);
 		} else if (health == 8) {
-			image(status08,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status08);
 		} else if (health == 7) {
-			image(status07,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status07);
 		} else if (health == 6) {
-			image(status06,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status06);
 		} else if (health == 5) {
-			image(status05,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status05);
 		} else if (health == 4) {
-			image(status04,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status04);
 		} else if (health == 3) {
-			image(status03,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status03);
 		} else if (health == 2) {
-			image(status02,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status02);
 		} else if (health == 1) {
-			image(status01,width*.90,height/2,width*0.2,height*0.9);
+			placeMenuImage(status01);
 		}
 	}
 
@@ -380,12 +391,18 @@ class Enemy{
 	float posX = random(width*0.1,width*0.8);
 	float posY = random(height*0.1,height*0.5);
 	boolean alive = true;
+	int shotInterval = int(random(5,30));
+	int shotOffset = int(random(0,120));
 
 	Enemy(){
 		
 	}
 
 	void draw(){
+		if ((frameCount + shotOffset) % (shotInterval*enemies.size() + 20) == 0){ // increases fire rate as enemies are destroyed
+			missilesEnemy.add(new MissileEnemy(posX,posY));	
+		}
+		
 		imageMode(CENTER);
 		image(enemy, posX, posY, craftSize, craftSize);
 	}
@@ -393,26 +410,28 @@ class Enemy{
 }
 
 void loadShooterImages(){
-	status10 = loadImage("../../data/lifeStatus/status10.png");
-	status09 = loadImage("../../data/lifeStatus/status09.png");
-	status08 = loadImage("../../data/lifeStatus/status08.png");
-	status07 = loadImage("../../data/lifeStatus/status07.png");
-	status06 = loadImage("../../data/lifeStatus/status06.png");
-	status05 = loadImage("../../data/lifeStatus/status05.png");
-	status04 = loadImage("../../data/lifeStatus/status04.png");
-	status03 = loadImage("../../data/lifeStatus/status03.png");
-	status02 = loadImage("../../data/lifeStatus/status02.png");
-	status01 = loadImage("../../data/lifeStatus/status01.png");
+	status10 = requestImage("../../data/lifeStatus/status10.png");
+	status09 = requestImage("../../data/lifeStatus/status09.png");
+	status08 = requestImage("../../data/lifeStatus/status08.png");
+	status07 = requestImage("../../data/lifeStatus/status07.png");
+	status06 = requestImage("../../data/lifeStatus/status06.png");
+	status05 = requestImage("../../data/lifeStatus/status05.png");
+	status04 = requestImage("../../data/lifeStatus/status04.png");
+	status03 = requestImage("../../data/lifeStatus/status03.png");
+	status02 = requestImage("../../data/lifeStatus/status02.png");
+	status01 = requestImage("../../data/lifeStatus/status01.png");
 
-	enemy = loadImage("../../data/enemy.png");
-	enemyFire = loadImage("../../data/enemyFire.png");
-	fighter = loadImage("../../data/fighter.png");
-	fighterFire = loadImage("../../data/fighterFire.png");
+	enemy = requestImage("../../data/enemy.png");
+	enemyFire = requestImage("../../data/enemyFire.png");
+	fighter = requestImage("../../data/fighter.png");
+	fighterFire = requestImage("../../data/fighterFire.png");
 
-	shooterPre00 = loadImage("../../data/shooterPre00.png");
-	shooterPre01 = loadImage("../../data/shooterPre01.png");
-	shooterPre02 = loadImage("../../data/shooterPre02.png");
-	shooterPre03 = loadImage("../../data/shooterPre03.png");
-	shooterPost00 = loadImage("../../data/shooterPost00.png");
+	shooterPre00 = requestImage("../../data/shooterPre00.png");
+	shooterPre01 = requestImage("../../data/shooterPre01.png");
+	shooterPre02 = requestImage("../../data/shooterPre02.png");
+	shooterPre03 = requestImage("../../data/shooterPre03.png");
+	shooterPre04 = requestImage("../../data/shooterPre04.png");
+	shooterPre05 = requestImage("../../data/shooterPre05.png");
+	shooterPost00 = requestImage("../../data/shooterPost00.png");
 
 }

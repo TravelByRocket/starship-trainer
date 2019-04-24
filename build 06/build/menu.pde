@@ -1,30 +1,28 @@
 // gameState range 10-19
 
-PImage rocket;
-PImage spacecraft;
-PImage missionRing;
-PImage defenseLabel;
-PImage shooterLabel;
-PImage attackLabel;
-PImage checkmark;
-PImage asteroid;
-
-PImage intro01;
-PImage intro01Success;
-PImage intro02;
+PImage menu00;
+PImage menu01;
+PImage menu02;
 
 boolean box1 = false;
 boolean box2 = false;
 boolean box3 = false;
 boolean box4 = false;
 
+PImage attackIncomplete;
+PImage attackSelected;
+PImage defenseIncomplete;
+PImage defenseSelected;
+PImage shooterIncomplete;
+PImage shooterSelected;
+
 void menuTraining(){ // gameState 10
 
 	imageMode(CORNERS);
 	if (!box1 || !box2 || !box3 || !box4){ // if at least one box is not yet triggered
-		image(intro01, 0, 0, width, height);
+		placeMenuImage(menu00);
 	} else {
-		image(intro01Success, 0, 0, width, height);
+		placeMenuImage(menu01);
 	}
 
 	noStroke();
@@ -75,6 +73,10 @@ void menuTraining(){ // gameState 10
 	if (scene == 0) {
 		// run everything above
 	} else if (scene == 1) {
+		box1 = false;
+		box2 = false;
+		box3 = false;
+		box4 = false;
 		gameState++;
 		scene=0;
 	}
@@ -84,13 +86,11 @@ void menuTraining(){ // gameState 10
 
 void menuMain() { // gameState 11
 	
-	imageMode(CORNERS);
-	image(intro02, 0, 0, width, height);
+	placeMenuImage(menu02);
 
-	// MENU ITEMS (3 positions, Left-to-Right, 0-indexed)
-	menuItemDraw(0, asteroid, gameRed, defenseWin, defenseLabel);
-	menuItemDraw(1, spacecraft, gameOrange, shooterWin, shooterLabel);
-	menuItemDraw(2, rocket, gamePink, attackWin, attackLabel);
+	menuItemDraw(0, shooterWin);
+	menuItemDraw(1, attackWin);
+	menuItemDraw(2, defenseWin);
 
 	leapManager();
 	
@@ -100,83 +100,37 @@ void menuStory(){ // gameState 11
 	gameState = gameStateSelection; // go to selected game
 }
 
-void menuItemDraw(
-	int thePosition, 
-	PImage theIcon, 
-	color theColor, 
-	boolean theState, 
-	PImage theName){
+void menuItemDraw(int thePosition, boolean theState){
 
-	// FUNCTION SETTINGS
-	imageMode(CENTER);
-	ellipseMode(CENTER); // this is the default but making explicit
-	float itemPosX = thePosition*width/3 + width/6;
-	float itemPosY = height*2/3;
-	float ringDiamOutside = width*0.30;
-	// float ringDiamInside =  width*0.19;
-	float iconHeight = width*0.35;
-	float iconWidth = iconHeight;
-
-	// DEACTIVATE COMPLETED LEVELS
-	if (theState) { // if the level has been beaten
-		tint(gameInactiveGray); // set the color to gray
-	} else { // if it has not been beaten
-		tint(theColor); // use the color assigned
-	}
-
-	// DRAW MENU RINGS
-	image(missionRing, itemPosX, itemPosY, ringDiamOutside, ringDiamOutside);	
+	imageMode(CORNERS);
 
 	if(theState){
-		tint(gameInactiveGray);
-	} else {
-		tint(gameWhite);
+		// do nothing because the level is beaten and the background has inactive state
+	} else if (!theState) {
+		if (thePosition == 0){
+			placeMenuImage(shooterIncomplete);
+		} else if (thePosition == 1) {
+			placeMenuImage(attackIncomplete);
+		} else if (thePosition == 2) {
+			placeMenuImage(defenseIncomplete);
+		}
 	}
 
-	// DRAW THE ICON
-	image(theIcon, 
-		itemPosX, 
-		itemPosY, 
-		iconHeight, 
-		iconWidth);
-
-	// DRAW CHECKMARK IF COMPLETED
-	if (theState) {
-		tint(gameGreen);
-		image(checkmark, 
-			itemPosX, 
-			itemPosY, 
-			iconHeight*0.5, 
-			iconWidth*0.5);
-	}
-	
-	// DRAW SELECTION INDICATOR, DRAW LEVEL NAME, DETERMINE GAMESTATE IF SELECTED
-
-	if( // do not draw the selection indicator of the level is completed
-		commandPositionX > thePosition*width/3 // if mouse to the right of the left limit
-		&& commandPositionX < (thePosition+1)*width/3){ // and if mouse to the left of the right limit
-		// mouseX > thePosition*width/3 // if mouse to the right of the left limit
-		// && mouseX < (thePosition+1)*width/3){ // and if mouse to the left of the right limit
-		
-		if(theState == false){ // and if the level has not been complete
-			// LEVEL NAME
-			tint(theColor);
-			image(theName, width/2, height*2/5);
-
-			// SELECTION INDICATOR
-			fill(gameWhite);
-			noStroke();
-			rectMode(CENTER);
-			rect(
-				itemPosX,
-				height*6/7,
-				width/5,
-				width/150);
-
-			// GAME STATE SELECTION
+	if(commandPositionX >= thePosition*width/3 
+		&& commandPositionX < (thePosition+1)*width/3){ // if the cursor is in the correct third
+		if(!theState){ // and if the level has not been completed
 			gameStateSelection = (thePosition+2)*10; // target cases 20, 30, & 40 from positions 0,1,2
-			// println("gameStateSelection: "+gameStateSelection);
-		} else { // selecting inactive section will keep in menu state
+			if (thePosition == 0){
+				placeMenuImage(shooterSelected);
+				gameStateSelection = 30;
+			} else if (thePosition == 1) {
+				placeMenuImage(attackSelected);
+				gameStateSelection = 40;
+			} else if (thePosition == 2) {
+				placeMenuImage(defenseSelected);
+				gameStateSelection = 20;
+			}
+		} else {
 			gameStateSelection = 11; 
 		}
 	}
@@ -202,16 +156,14 @@ void userInputsMenu(){
 }
 
 void loadMenuImages(){
-	missionRing = loadImage("../../data/mission ring.png");
-	defenseLabel = loadImage("../../data/planet defense text.png");
-	shooterLabel = loadImage("../../data/enemy encounter text.png");
-	attackLabel = loadImage("../../data/base attack text.png");
-	checkmark = loadImage("../../data/noun_Check_929005_FFFFFF.png");
-	asteroid = loadImage("../../data/planet defense icon.png");
-	rocket = loadImage("../../data/base attack icon.png");
-	spacecraft = loadImage("../../data/enemy encounter icon.png");
-	intro01 = loadImage("../../data/intro01.png");
-	intro02 = loadImage("../../data/intro02.png");
-	intro01Success = loadImage("../../data/intro01Success.png");
+	menu00 = requestImage("../../data/menu00.png");
+	menu01 = requestImage("../../data/menu01.png");
+	menu02 = requestImage("../../data/menu02.png");
+	attackIncomplete = requestImage("../../data/attackIncomplete.png");
+	attackSelected = requestImage("../../data/attackSelected.png");
+	defenseIncomplete = requestImage("../../data/defenseIncomplete.png");
+	defenseSelected = requestImage("../../data/defenseSelected.png");
+	shooterIncomplete = requestImage("../../data/shooterIncomplete.png");
+	shooterSelected = requestImage("../../data/shooterSelected.png");
 		
 }

@@ -17,19 +17,29 @@ float trainingCircleRadius = width*2;
 
 ArrayList<Ring> rings;
 ArrayList<Barrier> barriers;
+Slot slot;
+
+float velZ = 20;
 
 void attackIntro(){ // gameState 40
 	
-	imageMode(CORNERS);
 	if (scene == 0) {
-		image(attackPre00, 0, 0, width, height);
+		placeMenuImage(attackPre00);
+		animationScreen = 0;
 	} else if (scene == 1){
-		image(attackPre01, 0, 0, width, height);
+		if (frameCount % 50 == 0){
+			animationScreen++;
+		}
+		if (animationScreen == 0){
+			placeMenuImage(attackPre01);
+		} else if (animationScreen == 1) {
+			placeMenuImage(attackPre02);
+		} else {
+			animationScreen = 0;
+		}
 	} else if (scene == 2){
-		image(attackPre02, 0, 0, width, height);
-	} else if (scene == 3){
-		image(attackPre03, 0, 0, width, height);
-	} else if (scene == 4) {
+		placeMenuImage(attackPre03);
+	} else if (scene == 3) {
 		gameState++;
 		scene = 0;
 	}
@@ -97,7 +107,7 @@ void attackTraining(){ // gameState 41
 	}
 
 	if (scene == 0){
-		textSize(18);
+		textSize(24);
 		fill(255);
 		textAlign(CENTER,CENTER);
 		if (circs1 && circs2 && circs3 && circs4){
@@ -115,10 +125,12 @@ void attackTraining(){ // gameState 41
 	}
 }
 
+int barrierCount = 0;
+
 void attackGame(){ // gameState 42
 
 	lights();
-	
+
 	// add and place spacecraft
 	pushMatrix();
 	translate(width/2, height*3/4, 0);
@@ -135,13 +147,22 @@ void attackGame(){ // gameState 42
 		if (frameCount%15 == 0){
 			rings.add(new Ring());
 		}
-
-		if (frameCount%90 == 0){
-			barriers.add(new Barrier());
+		if (frameCount%60 == 0){
+			if (barrierCount <= 2){
+				barriers.add(new Barrier());
+				barrierCount++;
+				velZ++;
+			} else {
+				slot = new Slot();
+				scene++;
+			}	
 		}
 	} else if (scene == 2) {
+		
+	} else if (scene == 3) {
 		gameState++;
 		scene = 0;
+		barrierCount = 0;
 	}
 	
 	itemHandlingAttack();
@@ -152,7 +173,7 @@ void attackStory(){ // // gameState 43
 	
 	imageMode(CORNERS);
 	if (scene == 0){
-		image(attackPost00, 0, 0, width, height);
+		placeMenuImage(attackPost00);
 		attackWin = true;
 	} else if (scene == 1) {
 		gameState = 60;
@@ -174,11 +195,11 @@ void leapInputsAttack(){ //better to call userLeapShooter?
 }
 
 void loadAttackImages(){
-	attackPost00 = loadImage("../../data/attackPost00.png");
-	attackPre00 = loadImage("../../data/attackPre00.png");
-	attackPre01 = loadImage("../../data/attackPre01.png");
-	attackPre02 = loadImage("../../data/attackPre02.png");
-	attackPre03 = loadImage("../../data/attackPre03.png");
+	attackPost00 = requestImage("../../data/attackPost00.png");
+	attackPre00 = requestImage("../../data/attackPre00.png");
+	attackPre01 = requestImage("../../data/attackPre01.png");
+	attackPre02 = requestImage("../../data/attackPre02.png");
+	attackPre03 = requestImage("../../data/attackPre03.png");
 	spacecraft3d = loadShape("../../data/spacecraft.obj");
 }
 
@@ -189,8 +210,8 @@ class Ring{
 	float centerY = height*3/4;
 	float posZ = startingDepth;
 	boolean expired = false;
-	float velZ = 20;
-	int fader;
+	// float velZ = 20;
+	private int fader;
 
 	Ring(){
 		fader = 0;
@@ -230,7 +251,7 @@ class Barrier{
 	float centerY = height*3/4;
 	float posZ = startingDepth;
 	boolean expired = false;
-	float velZ = 20;
+	// float velZ = 20;
 	int fader;
 	float rotation = random(-50,50);
 
@@ -264,6 +285,48 @@ class Barrier{
 	}
 }
 
+class Slot{
+	float startingDepth = -2000; // more negative is into the distance
+	float radius = width/2;
+	float centerX = width/2;
+	float centerY = height*3/4;
+	float posZ = startingDepth;
+	boolean expired = false;
+	// float velZ = 20;
+	int fader;
+	float rotation = 0;
+
+	Slot(){
+		fader = 0;
+	}
+
+	void draw(){
+		ellipseMode(CENTER);
+		pushMatrix();
+		translate(0, 0, posZ);
+		// noStroke();
+		stroke(fader);
+		// fill(fader);
+		noFill();
+		rectMode(CENTER);
+		rect(centerX, centerY, radius*1.5, radius/4);
+		// ellipse(centerX, centerY, radius*2, radius*2);
+		// fill(0);
+		// ellipse(centerX, centerY, radius, radius/4);
+		popMatrix();
+		posZ += velZ;
+		if (posZ > 1000){
+			expired = true;
+		}
+
+		fader += 1;
+		if (fader > 100){
+			fader = 100;
+		}
+		
+	}
+}
+
 void itemHandlingAttack(){
 	for (int i = rings.size() - 1; i >= 0; i--) { // go backwards through ArrayList of blasts
 	 	Ring ri = rings.get(i); // get the missile at current index
@@ -281,5 +344,9 @@ void itemHandlingAttack(){
 	 	} else {
 	 		ba.draw();
 	 	}
+	}
+
+	if (slot != null){
+		slot.draw();
 	}
 }

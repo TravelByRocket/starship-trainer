@@ -5,6 +5,11 @@ PImage defensePre00;
 PImage defensePre01;
 PImage defensePre02;
 PImage defensePre03;
+PImage defensePre04;
+PImage defensePre05;
+PImage defensePre06;
+PImage defensePre07;
+PImage defensePre08;
 PImage defensePost00;
 
 PImage defenseBackground;
@@ -23,17 +28,30 @@ int destroyCount = 0;
 
 void defenseIntro(){ //gameState 20
 	
-	tint(255,255);
-	imageMode(CORNERS);
-	
 	if (scene == 0) {	
-		image(defensePre00,0,0,width,height);
+		placeMenuImage(defensePre00);
+		animationScreen = 0;
 	} else if (scene == 1) {
-		image(defensePre01,0,0,width,height);
+		if (frameCount % 50 == 0){
+			animationScreen++;
+		}
+		if (animationScreen == 0){
+			placeMenuImage(defensePre01);
+		} else if (animationScreen == 1) {
+			placeMenuImage(defensePre02);
+		} else if (animationScreen == 2) {
+			placeMenuImage(defensePre04);
+		} else if (animationScreen == 3) {
+			placeMenuImage(defensePre05);
+		} else if (animationScreen == 4) {
+			placeMenuImage(defensePre06);
+		} else if (animationScreen == 5) {
+			placeMenuImage(defensePre07);
+		} else {
+			animationScreen = 0;
+		}
 	} else if (scene == 2) {
-		image(defensePre02,0,0,width,height);
-	} else if (scene == 3) {
-		image(defensePre03,0,0,width,height);
+		placeMenuImage(defensePre08);
 	} else {
 		gameState++;
 		scene = 0;
@@ -41,10 +59,10 @@ void defenseIntro(){ //gameState 20
 }
 
 void defenseTraining(){ // gameState 21
-	imageMode(CORNER);
-	image(defenseBackground,0,0,width,height);
 
-	textSize(18);
+	placeMenuImage(defenseBackground);
+
+	textSize(24);
 	fill(255);
 	textAlign(CENTER,CENTER);
 
@@ -73,8 +91,7 @@ void defenseTraining(){ // gameState 21
 
 void defenseGame(){ //gameState 22
 
-	imageMode(CORNER);
-	image(defenseBackground,0,0,width,height);
+	placeMenuImage(defenseBackground);
 	int numActiveAsteroids = 5;
 
 	if (scene == 0){
@@ -86,7 +103,7 @@ void defenseGame(){ //gameState 22
 		}
 		planetCenterX = width/2;
 		planetCenterY = height;
-		planetRadius = width*.4;
+		planetRadius = width*.35;
 		planetHealth = 10;
 		destroyCount = 0;
 		scene++;
@@ -104,7 +121,7 @@ void defenseGame(){ //gameState 22
 		scene = 0;
 	}
 
-	textSize(22);
+	textSize(24);
 	fill(gameOrange);
 	textAlign(LEFT,TOP);
 	text("Asteroids Destroyed:"+destroyCount+"of 12", 0, 0);
@@ -121,9 +138,8 @@ void defenseGame(){ //gameState 22
 }
 
 void defenseStory(){ //gameState 23
-	imageMode(CORNERS);
 	if (scene == 0){
-		image(defensePost00,0,0,height,width);
+		placeMenuImage(defensePost00);
 	} else if (scene == 1) {
 		defenseWin = true;
 		gameState = 60;
@@ -234,8 +250,8 @@ class Asteroid{
 			stroke(gameOrange, fader);
 			strokeWeight(3);
 			noFill();
-			ellipse(posX+width/8*cos(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
-				posY+width/8*sin(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
+			ellipse(posX+width/10*cos(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
+				posY+width/10*sin(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
 				15,15);
 		}
 		posX+= velX;
@@ -369,39 +385,43 @@ void itemHandling(){
 }
 
 void loadDefenseImages(){
-	asteroid01 = loadImage("../../data/asteroid01.png");
+	asteroid01 = requestImage("../../data/asteroid01.png");
 
-	defensePre00 = loadImage("../../data/defensePre00.png");
-	defensePre01 = loadImage("../../data/defensePre01.png");
-	defensePre02 = loadImage("../../data/defensePre02.png");
-	defensePre03 = loadImage("../../data/defensePre03.png");
-	defensePost00 = loadImage("../../data/defensePost00.png");
+	defensePre00 = requestImage("../../data/defensePre00.png");
+	defensePre01 = requestImage("../../data/defensePre01.png");
+	defensePre02 = requestImage("../../data/defensePre02.png");
+	defensePre03 = requestImage("../../data/defensePre03.png");
+	defensePre04 = requestImage("../../data/defensePre04.png");
+	defensePre05 = requestImage("../../data/defensePre05.png");
+	defensePre06 = requestImage("../../data/defensePre06.png");
+	defensePre07 = requestImage("../../data/defensePre07.png");
+	defensePre08 = requestImage("../../data/defensePre08.png");
+	defensePost00 = requestImage("../../data/defensePost00.png");
 
-	defenseBackground = loadImage("../../data/Planet Defense Blank Screen-01.png");
-	blast = loadImage("../../data/playerBlast.png");
+	defenseBackground = requestImage("../../data/Planet Defense Blank Screen-01.png");
+	blast = requestImage("../../data/playerBlast.png");
 }
 
 void drawHealthBarPlanet(int theHealth){
-	imageMode(CENTER);
 	if (theHealth == 10) {
-		image(status10,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status10);
 	} else if (theHealth == 9) {
-		image(status09,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status09);
 	} else if (theHealth == 8) {
-		image(status08,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status08);
 	} else if (theHealth == 7) {
-		image(status07,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status07);
 	} else if (theHealth == 6) {
-		image(status06,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status06);
 	} else if (theHealth == 5) {
-		image(status05,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status05);
 	} else if (theHealth == 4) {
-		image(status04,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status04);
 	} else if (theHealth == 3) {
-		image(status03,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status03);
 	} else if (theHealth == 2) {
-		image(status02,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status02);
 	} else if (theHealth == 1) {
-		image(status01,width*.90,height/2,width*0.2,height*0.9);
+		placeMenuImage(status01);
 	}
 }

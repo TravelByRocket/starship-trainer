@@ -11,9 +11,22 @@ float handRoll;
 PImage menuCursor;
 PImage playerCursor;
 
+PImage handBack;
+PImage handDown;
+PImage handForward;
+PImage handLeft;
+PImage handRight;
+PImage handUp;
+
 void loadLeapImages(){
-	menuCursor = loadImage("../../data/menuCursor.png");
-	playerCursor = loadImage("../../data/playerCursor.png");
+	menuCursor = requestImage("../../data/menuCursor.png");
+	playerCursor = requestImage("../../data/playerCursor.png");
+	handBack = requestImage("../../data/handBack.png");
+	handDown = requestImage("../../data/handDown.png");
+	handForward = requestImage("../../data/handForward.png");
+	handLeft = requestImage("../../data/handLeft.png");
+	handRight = requestImage("../../data/handRight.png");
+	handUp = requestImage("../../data/handUp.png");
 }
 
 void leapManager(){
@@ -36,7 +49,7 @@ void leapManager(){
 			commandPositionZ = handPosition.z;
 			handRoll = hand.getRoll();
 
-			if (gameState != 21 && gameState != 22){
+			if (gameState != 21 && gameState != 22 && gameState != 41 && gameState != 42){
 				imageMode(CENTER);
 				tint(255);
 				image(menuCursor,commandPositionX,commandPositionY,40,40);
@@ -71,45 +84,51 @@ void leapManager(){
 	}
 
 	if (commandPositionX < 0){
-		fill(#FF0000);
-		textSize(24);
-		textAlign(CENTER,CENTER);
-		text("Move\nRight", width/4, height/2);
+		// fill(#FF0000);
+		// textSize(24);
+		// textAlign(CENTER,CENTER);
+		// text("Move\nRight", width/4, height/2);
+		placeMenuImage(handRight);
 	}
 
 	if (commandPositionX > width){
-		fill(#FF0000);
-		textSize(24);
-		textAlign(CENTER,CENTER);
-		text("Move\nLeft", width*3/4, height/2);
+		// fill(#FF0000);
+		// textSize(24);
+		// textAlign(CENTER,CENTER);
+		// text("Move\nLeft", width*3/4, height/2);
+		placeMenuImage(handLeft);
 	}
 
 	if (commandPositionY < 0){
-		fill(#FF0000);
-		textSize(24);
-		textAlign(CENTER,CENTER);
-		text("Move\nDown", width/2, height/4);
+		// fill(#FF0000);
+		// textSize(24);
+		// textAlign(CENTER,CENTER);
+		// text("Move\nDown", width/2, height/4);
+		placeMenuImage(handDown);
 	}
 
 	if (commandPositionY > height){
-		fill(#FF0000);
-		textSize(24);
-		textAlign(CENTER,CENTER);
-		text("Move\nUp", width/2, height*3/4);
+		// fill(#FF0000);
+		// textSize(24);
+		// textAlign(CENTER,CENTER);
+		// text("Move\nUp", width/2, height*3/4);
+		placeMenuImage(handUp);
 	}
 
 	if (commandPositionZ > 65){
-		fill(#FF0000);
-		textSize(24);
-		textAlign(CENTER,CENTER);
-		text("Move Hand\nToward You", width/2, height*3/4);
+		// fill(#FF0000);
+		// textSize(24);
+		// textAlign(CENTER,CENTER);
+		// text("Move Hand\nToward You", width/2, height*3/4);
+		placeMenuImage(handBack);
 	}
 
 	if (commandPositionZ < 30){
-		fill(#FF0000);
-		textSize(24);
-		textAlign(CENTER,CENTER);
-		text("Move Hand\nAway from You", width/2, height*3/4);
+		// fill(#FF0000);
+		// textSize(24);
+		// textAlign(CENTER,CENTER);
+		// text("Move Hand\nAway from You", width/2, height*3/4);
+		placeMenuImage(handForward);
 	}
 
 	if (handCount == 0){
@@ -133,14 +152,14 @@ float leapCenteringY = 420;
 
 float mapLeapX(float thePosX){
 	return map(thePosX,
-		leapCenteringX-((width/2)*ratioLeapScreen),
-		leapCenteringX+((width/2)*ratioLeapScreen),
+		leapCenteringX-((gWidthWindow/2)*ratioLeapScreen),
+		leapCenteringX+((gWidthWindow/2)*ratioLeapScreen),
 		0,width);
 }
 
 float mapLeapY(float thePosY){
 	return map(thePosY,
-		leapCenteringY-((height/2)*ratioLeapScreen),
-		leapCenteringY+((height/2)*ratioLeapScreen),
+		leapCenteringY-((gHeightWindow/2)*ratioLeapScreen),
+		leapCenteringY+((gHeightWindow/2)*ratioLeapScreen),
 		0,height);
 }

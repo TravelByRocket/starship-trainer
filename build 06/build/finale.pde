@@ -2,31 +2,21 @@
 
 PImage finalePre00;
 PImage finalePre01;
-PImage finalePre02;
-PImage finalePre03;
-PImage finalePost00;
-PImage finalePost01;
-PImage finalePost02;
+PImage finaleGame00;
+PImage finalePostSuccess00;
+PImage finalePostSuccess01;
+PImage finalePostSuccess02;
+PImage finalePostSuccess03;
 
 void finaleIntro(){ //gameState 50
-
-	tint(255);
-
-	imageMode(CORNER);
-
 	if (scene == 0) {
-		image(finalePre00,0,0,width,height);
+		placeMenuImage(finalePre00);
 	} else if (scene == 1) {
-		image(finalePre01,0,0,width,height);
-	} else if (scene == 2) {
-		image(finalePre02,0,0,width,height);
-	} else if (scene == 3) {
-		image(finalePre03,0,0,width,height);
+		placeMenuImage(finalePre01);
 	} else {
 		gameState++;
 		scene = 0;
 	}
-
 }
 
 void finaleTraining(){ //gameState 51
@@ -34,18 +24,28 @@ void finaleTraining(){ //gameState 51
 }
 
 void finaleGame(){ //gameState 52
-	// textAlign(CENTER,CENTER);
-	// text("Finale Win", width/2, height/2);
-	gameState++;
+	
+	if (scene == 0){
+		placeMenuImage(finaleGame00);	
+	} else if (scene == 1) {
+		gameState++;
+		scene = 0;
+	}
+	
 }
 
 void finaleStory(){ // gameState 53
 	if (scene == 0) {
-		// image(FinalePost00,0,0,width,height);
-		image(finalePost01,0,0,width,height);
+		placeMenuImage(finalePostSuccess00);
 	} else if (scene == 1) {
+		placeMenuImage(finalePostSuccess01);
+	} else if (scene == 2) {
+		placeMenuImage(finalePostSuccess02);
+	} else if (scene == 2) {
+		placeMenuImage(finalePostSuccess03);
+	} else if (scene == 3) {
 		resetGame();
-	}	
+	}
 }
 
 void userInputsFinale(){
@@ -55,11 +55,11 @@ void userInputsFinale(){
 }
 
 void loadFinaleImages(){
-	finalePre00 = loadImage("../../data/finalePre00.png");
-	finalePre01 = loadImage("../../data/finalePre01.png");
-	finalePre02 = loadImage("../../data/finalePre02.png");
-	finalePre03 = loadImage("../../data/finalePre03.png");
-	finalePost00 = loadImage("../../data/finalePost00.png");
-	finalePost01 = loadImage("../../data/finalePost01.png");
-
+	finalePre00 = requestImage("../../data/finalePre00.png");
+	finalePre01 = requestImage("../../data/finalePre01.png");
+	finaleGame00 = requestImage("../../data/finaleGame00.png");
+	finalePostSuccess00 = requestImage("../../data/finalePostSuccess00.png");
+	finalePostSuccess01 = requestImage("../../data/finalePostSuccess01.png");
+	finalePostSuccess02 = requestImage("../../data/finalePostSuccess02.png");
+	finalePostSuccess03 = requestImage("../../data/finalePostSuccess03.png");
 }
