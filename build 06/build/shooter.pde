@@ -1,7 +1,7 @@
 // gameState range 30-39
 
-PImage statusShip10;
-PImage statusShip09;
+// PImage statusShip10;
+// PImage statusShip09;
 PImage statusShip08;
 PImage statusShip07;
 PImage statusShip06;
@@ -10,6 +10,7 @@ PImage statusShip04;
 PImage statusShip03;
 PImage statusShip02;
 PImage statusShip01;
+PImage statusShip00;
 
 PImage fighter;
 PImage fighterFire;
@@ -83,23 +84,23 @@ void shooterTraining(){ // gameState 31
 	noStroke();
 	if (rect1) {
 		fill(gameGreen);
-		rect(width*.1,height*.85,width*.3,height*.95);
+		rect(width*.2,height*.85,width*.3,height*.95);
 	} else if (!rect1) {
 		fill(gameOrange);
-		rect(width*.1,height*.85,width*.3,height*.95);
+		rect(width*.2,height*.85,width*.3,height*.95);
 	}
 
 	if (rect2) {
 		fill(gameGreen);
-		rect(width*.7,height*.85,width*.9,height*.95);
+		rect(width*.7,height*.85,width*.8,height*.95);
 	} else if (!rect2) {
 		fill(gameOrange);
-		rect(width*.7,height*.85,width*.9,height*.95);
+		rect(width*.7,height*.85,width*.8,height*.95);
 	}
 
-	if (player.posX > width*.1 && player.posX < width*.3){
+	if (player.posX > width*.2 && player.posX < width*.3){
 		rect1 = true;
-	} else if (player.posX > width*.7 && player.posX < width*.9){
+	} else if (player.posX > width*.7 && player.posX < width*.8){
 		rect2 = true;
 	}
 
@@ -225,14 +226,9 @@ void shooterStory(){ //gameState 33
 
 void userInputsShooter(){ //better to call userKeysShooter?
 	if (key == ' ') {
-		if(gameState == 32){
-			missilesPlayer.add(new MissilePlayer());
-			// for (Enemy en : enemies){
-			// 	missilesEnemy.add(new MissileEnemy(en.posX,en.posY));
-			// }
-		} else if (gameState == 30){
+		if (gameState == 30){
 			scene++;
-		} else if (gameState == 31 && scene == 0){
+		} else if (gameState == 31 && rect1 && rect2 && scene == 0){
 			missilesPlayer.add(new MissilePlayer());
 			scene++;
 		} else if (gameState == 31 && scene == 1){
@@ -241,6 +237,8 @@ void userInputsShooter(){ //better to call userKeysShooter?
 			rect1 = false;
 			rect2 = false;
 			startupShooter = true;
+		} else if (gameState == 32){
+			missilesPlayer.add(new MissilePlayer());
 		} else if (gameState == 33) {
 			scene++;
 		} else {
@@ -293,27 +291,24 @@ class Player{
 
 	void drawHealthBar(){
 		if (health == 9) {
-			placeMenuImage(statusShip10);
-		} else if (health == 8) {
-			placeMenuImage(statusShip09);
-		} else if (health == 7) {
 			placeMenuImage(statusShip08);
-		} else if (health == 6) {
+		} else if (health == 8) {
 			placeMenuImage(statusShip07);
-		} else if (health == 5) {
+		} else if (health == 7) {
 			placeMenuImage(statusShip06);
-		} else if (health == 4) {
+		} else if (health == 6) {
 			placeMenuImage(statusShip05);
-		} else if (health == 3) {
+		} else if (health == 5) {
 			placeMenuImage(statusShip04);
-		} else if (health == 2) {
+		} else if (health == 4) {
 			placeMenuImage(statusShip03);
-		} else if (health == 1) {
+		} else if (health == 3) {
 			placeMenuImage(statusShip02);
-		} 
-		// else if (health == 1) {
-		// 	placeMenuImage(statusShip01);
-		// }
+		} else if (health == 2) {
+			placeMenuImage(statusShip01);
+		} else if (health == 1) {
+			placeMenuImage(statusShip00);
+		}
 	}
 
 	void floatLeft(){
@@ -413,8 +408,8 @@ class Enemy{
 }
 
 void loadShooterImages(){
-	statusShip10 = requestImage("../../data/lifeStatus/statusShip10.png");
-	statusShip09 = requestImage("../../data/lifeStatus/statusShip09.png");
+	// statusShip10 = requestImage("../../data/lifeStatus/statusShip10.png");
+	// statusShip09 = requestImage("../../data/lifeStatus/statusShip09.png");
 	statusShip08 = requestImage("../../data/lifeStatus/statusShip08.png");
 	statusShip07 = requestImage("../../data/lifeStatus/statusShip07.png");
 	statusShip06 = requestImage("../../data/lifeStatus/statusShip06.png");
@@ -422,7 +417,8 @@ void loadShooterImages(){
 	statusShip04 = requestImage("../../data/lifeStatus/statusShip04.png");
 	statusShip03 = requestImage("../../data/lifeStatus/statusShip03.png");
 	statusShip02 = requestImage("../../data/lifeStatus/statusShip02.png");
-	// status01 = requestImage("../../data/lifeStatus/statusShip01.png");
+	statusShip01 = requestImage("../../data/lifeStatus/statusShip01.png");
+	statusShip00 = requestImage("../../data/lifeStatus/statusShip00.png");
 
 	enemy = requestImage("../../data/enemy.png");
 	enemyFire = requestImage("../../data/enemyFire.png");

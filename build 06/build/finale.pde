@@ -42,11 +42,11 @@ void finaleStory(){ // gameState 53
 		placeMenuImage(finalePostSuccess01);
 	} else if (scene == 2) {
 		placeMenuImage(finalePostSuccess02);
-	} else if (scene == 2) {
-		placeMenuImage(finalePostSuccess03);
 	} else if (scene == 3) {
-		placeMenuImage(endCredits);
+		placeMenuImage(finalePostSuccess03);
 	} else if (scene == 4) {
+		placeMenuImage(endCredits);
+	} else if (scene == 5) {
 		resetGame();
 	}
 }

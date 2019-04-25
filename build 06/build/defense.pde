@@ -27,8 +27,8 @@ float planetRadius;
 int planetHealth = 9;
 int destroyCount = 0;
 
-PImage statusPlanet10;
-PImage statusPlanet09;
+// PImage statusPlanet10;
+// PImage statusPlanet09;
 PImage statusPlanet08;
 PImage statusPlanet07;
 PImage statusPlanet06;
@@ -37,6 +37,7 @@ PImage statusPlanet04;
 PImage statusPlanet03;
 PImage statusPlanet02;
 PImage statusPlanet01;
+PImage statusPlanet00;
 
 void defenseIntro(){ //gameState 20
 	
@@ -115,7 +116,7 @@ void defenseGame(){ //gameState 22
 		}
 		planetCenterX = width/2;
 		planetCenterY = height;
-		planetRadius = width*.45;
+		planetRadius = width*.4;
 		planetHealth = 9;
 		destroyCount = 0;
 		scene++;
@@ -125,7 +126,7 @@ void defenseGame(){ //gameState 22
 		}
 	}
 
-	if (destroyCount >= 12){
+	if (destroyCount >= 10){
 		gameState++;
 		scene = 0;
 	} else if (planetHealth <= 0) {
@@ -136,13 +137,13 @@ void defenseGame(){ //gameState 22
 	textSize(24);
 	fill(gameOrange);
 	textAlign(LEFT,TOP);
-	text("Asteroids Destroyed:"+destroyCount+"of 12", 0, 0);
+	text("Asteroids Destroyed: "+destroyCount+" of 10", 0, 0);
 
 	ellipseMode(CENTER);
 	strokeWeight(3);
-	stroke(gameGreen);
+	stroke(gameRed);
 	noFill();
-	ellipse(planetCenterX, planetCenterY, planetRadius*2, planetRadius*2);
+	ellipse(planetCenterX, planetCenterY, planetRadius*2, planetRadius*2);	
 
 	drawHealthBarPlanet(planetHealth);
 	itemHandling();
@@ -163,7 +164,7 @@ void userInputsDefense(){
 	if (key == ' ') {
 		if(gameState == 20){
 			scene++;
-		} else if (gameState == 21){
+		} else if (gameState == 21 && asteroids.size() == 0){
 			scene++;
 		} else if (gameState == 22) {
 			//no button needed
@@ -264,9 +265,11 @@ class Asteroid{
 				fader = 255;
 			}
 
-			stroke(gameOrange, fader);
-			strokeWeight(3);
-			noFill();
+			// stroke(gameOrange, fader);
+			// strokeWeight(3);
+			// noFill();
+			fill(gameOrange, fader);
+			noStroke();
 			ellipse(posX+width/10*cos(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
 				posY+width/10*sin(radians((millis()*spinSpeedFactor)%360+rotationOffset)),
 				15,15);
@@ -419,8 +422,8 @@ void loadDefenseImages(){
 	defenseBackground = requestImage("../../data/Planet Defense Blank Background-01.png");
 	blast = requestImage("../../data/playerBlast.png");
 
-	statusPlanet10 = requestImage("../../data/lifeStatus/statusPlanet10.png");
-	statusPlanet09 = requestImage("../../data/lifeStatus/statusPlanet09.png");
+	// statusPlanet10 = requestImage("../../data/lifeStatus/statusPlanet10.png");
+	// statusPlanet09 = requestImage("../../data/lifeStatus/statusPlanet09.png");
 	statusPlanet08 = requestImage("../../data/lifeStatus/statusPlanet08.png");
 	statusPlanet07 = requestImage("../../data/lifeStatus/statusPlanet07.png");
 	statusPlanet06 = requestImage("../../data/lifeStatus/statusPlanet06.png");
@@ -428,29 +431,28 @@ void loadDefenseImages(){
 	statusPlanet04 = requestImage("../../data/lifeStatus/statusPlanet04.png");
 	statusPlanet03 = requestImage("../../data/lifeStatus/statusPlanet03.png");
 	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet02.png");
+	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet01.png");
+	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet00.png");
 }
 
 void drawHealthBarPlanet(int theHealth){
 	if (theHealth == 9) {
-		placeMenuImage(statusPlanet10);
-	} else if (theHealth == 8) {
-		placeMenuImage(statusPlanet09);
-	} else if (theHealth == 7) {
 		placeMenuImage(statusPlanet08);
-	} else if (theHealth == 6) {
+	} else if (theHealth == 8) {
 		placeMenuImage(statusPlanet07);
-	} else if (theHealth == 5) {
+	} else if (theHealth == 7) {
 		placeMenuImage(statusPlanet06);
-	} else if (theHealth == 4) {
+	} else if (theHealth == 6) {
 		placeMenuImage(statusPlanet05);
-	} else if (theHealth == 3) {
+	} else if (theHealth == 5) {
 		placeMenuImage(statusPlanet04);
-	} else if (theHealth == 2) {
+	} else if (theHealth == 4) {
 		placeMenuImage(statusPlanet03);
-	} else if (theHealth == 1) {
+	} else if (theHealth == 3) {
 		placeMenuImage(statusPlanet02);
+	} else if (theHealth == 2) {
+		placeMenuImage(statusPlanet01);
+	} else if (theHealth == 1) {
+		placeMenuImage(statusPlanet00);
 	} 
-	// else if (theHealth == 1) {
-	// 	placeMenuImage(statusPlanet01);
-	// }
 }

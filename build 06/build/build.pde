@@ -19,14 +19,14 @@ LeapMotion leap;
 
 // CHOOSE GAME DISPLAY MODE (select/deselect with comments)
 // int gameMode = 0; // window, 1 screen
-int gameMode = 1; // fullscreen, 1 screen
+// int gameMode = 1; // ATLAS EPO PRODUCTION fullscreen, external monitor
 // int gameMode = 2; // window, square, 1:1
-// int gameMode = 3; // 2 screen, span
+int gameMode = 3; // ATLAS EXPO PREP fullscreen, laptop monitor
 // int gameMode = 4; // 1 screen, 1 window, split window
 
 // DISPLAY DEBUGGING VISUAL GUIDES (select/deselect with comments)
-boolean planMode = true; // DO display guides
-// boolean planMode = false; // do NOT display guides
+// boolean planMode = true; // DO display guides
+boolean planMode = false; // do NOT display guides
 
 // IMAGES (must be loaded in SETUP)
 
@@ -82,10 +82,10 @@ void settings() {
 			fullScreen(P3D);
 			// surface.setSize(700,700);
 			smallestDimension = min(width,height);
-			gHeightWindow = 700; // game window height
-			gWidthWindow = 700; // game window width
-			bHeightWindow = 700; // background window height
-			bWidthWindow = 700; // background window width
+			gHeightWindow = 1080; // game window height
+			gWidthWindow = 1080; // game window width
+			bHeightWindow = 1080; // background window height
+			bWidthWindow = 1080; // background window width
 			// gHeightScreen = height; // game screen height
 			// gWidthScreen = width; // game screen width
 			// bHeightScreen = height; // background screen height
@@ -95,7 +95,13 @@ void settings() {
 			size(768,768,P3D);
 			break;
 		case 3:
-			fullScreen(SPAN);
+			fullScreen(P3D);
+			// surface.setSize(700,700);
+			smallestDimension = min(width,height);
+			gHeightWindow = 800; // game window height
+			gWidthWindow = 800; // game window width
+			bHeightWindow = 800; // background window height
+			bWidthWindow = 800; // background window width
 			break;
 		case 4:
 			size(500, 700, P3D);
@@ -137,8 +143,13 @@ void setup() {
 void draw() {
 	// println("width: "+width);
 	// println("height: "+height);
-	surface.setSize(700,700);
-	surface.setLocation(370,50);
+	if (gameMode == 1){
+		surface.setSize(1080,1080);
+		surface.setLocation(-1080,200);
+	} else if (gameMode == 3) {
+		surface.setSize(800,800);
+		surface.setLocation(200,50);
+	}
 
 	if (peppersGhostOrientation){
 		pushMatrix();
@@ -278,6 +289,7 @@ void resetGame(){
 	defenseWin = false;
 	shooterWin = false;
 	attackWin = false;
+	numGameWins = 0;
 }
 
 
@@ -320,6 +332,8 @@ void keyPressed() {
 	} else if (key == '5'){ // finale
 		gameState = 50;
 		scene = 0;
+	} else if (key == 'r'){ // finale
+		resetGame();
 	}
 
 	if (key == 'w'){

@@ -24,6 +24,7 @@ float velZ = 20;
 void attackIntro(){ // gameState 40
 	
 	if (scene == 0) {
+		// slot = null;
 		placeMenuImage(attackPre00);
 		animationScreen = 0;
 	} else if (scene == 1){
@@ -148,21 +149,23 @@ void attackGame(){ // gameState 42
 			rings.add(new Ring());
 		}
 		if (frameCount%60 == 0){
-			if (barrierCount <= 2){
+			if (barrierCount <= 12){
 				barriers.add(new Barrier());
 				barrierCount++;
-				velZ++;
+				velZ+=4;
 			} else {
 				slot = new Slot();
 				scene++;
 			}	
 		}
 	} else if (scene == 2) {
-		
+		// next scene triggered within Slot class
 	} else if (scene == 3) {
 		gameState++;
 		scene = 0;
 		barrierCount = 0;
+		attackWin = true;
+		slot = null;
 	}
 	
 	itemHandlingAttack();
@@ -174,17 +177,25 @@ void attackStory(){ // // gameState 43
 	imageMode(CORNERS);
 	if (scene == 0){
 		placeMenuImage(attackPost00);
-		attackWin = true;
 	} else if (scene == 1) {
 		gameState = 60;
-		scene = 0;	
+		scene = 0;
 	}
 }
 
 void userInputsAttack(){
 	
 	if (key == ' ') {
-		scene++;
+		if (gameState == 40){
+			scene++;
+		} else if (gameState == 41 && circs1 && circs2 && circs3 && circs4) {
+			scene++;
+		} else if (gameState == 42) {
+			// nothing, must complete game
+		} else if (gameState == 43) {
+			scene++;
+		}
+
 	}
 	
 }
@@ -236,9 +247,9 @@ class Ring{
 			expired = true;
 		}
 
-		fader += 1;
-		if (fader > 100){
-			fader = 100;
+		fader += 2;
+		if (fader > 150){
+			fader = 150;
 		}
 		
 	}
@@ -277,9 +288,9 @@ class Barrier{
 			expired = true;
 		}
 
-		fader += 1;
-		if (fader > 100){
-			fader = 100;
+		fader += 2;
+		if (fader > 150){
+			fader = 150;
 		}
 		
 	}
@@ -295,6 +306,7 @@ class Slot{
 	// float velZ = 20;
 	int fader;
 	float rotation = 0;
+	int endGameFader = 0;
 
 	Slot(){
 		fader = 0;
@@ -319,9 +331,19 @@ class Slot{
 			expired = true;
 		}
 
-		fader += 1;
-		if (fader > 100){
+		fader += 2;
+		if (fader > 200){
 			fader = 100;
+		}
+
+		if (posZ > -400){
+			endGameFader += 10;
+			rectMode(CORNERS);
+			fill(255,endGameFader);
+			rect(0,0,gHeightWindow, gWidthWindow);
+			if(endGameFader > 240){
+				scene++;
+			}
 		}
 		
 	}
