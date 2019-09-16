@@ -1,5 +1,4 @@
 //**********************************************************************
-// Program name      : .pde
 // Author            : Bryan Costanza (GitHub: TravelByRocket)
 // Date created      : 20190311
 // Purpose           : Arcade game powered by LEAP Motion gestures
@@ -18,10 +17,10 @@ import de.voidplus.leapmotion.*;
 LeapMotion leap;
 
 // CHOOSE GAME DISPLAY MODE (select/deselect with comments)
-// int gameMode = 0; // window, 1 screen
-// int gameMode = 1; // ATLAS EPO PRODUCTION fullscreen, external monitor
+ //int gameMode = 0; // window, 1 screen
+//int gameMode = 1; // ATLAS EPO PRODUCTION fullscreen, external monitor
 // int gameMode = 2; // window, square, 1:1
-int gameMode = 3; // ATLAS EXPO PREP fullscreen, laptop monitor
+ int gameMode = 3; // ATLAS EXPO PREP fullscreen, laptop monitor
 // int gameMode = 4; // 1 screen, 1 window, split window
 
 // DISPLAY DEBUGGING VISUAL GUIDES (select/deselect with comments)
@@ -31,9 +30,9 @@ boolean planMode = false; // do NOT display guides
 // IMAGES (must be loaded in SETUP)
 
 PImage missionFail;
-PImage firstPost00;
+PImage firstPost00; // after winning first mission
 PImage firstPost01;
-PImage secondPost00;
+PImage secondPost00; // after winning second mission
 PImage secondPost01;
 
 //COLORS
@@ -158,7 +157,7 @@ void draw() {
 		translate(0, -height, 0);
 	}
 
-	background(0); // draw a black backround all the time
+	background(0); // draw a black background all the time
 
 	switch(gameState) {
 		case 0: // intro

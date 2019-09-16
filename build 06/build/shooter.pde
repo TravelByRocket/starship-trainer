@@ -51,15 +51,15 @@ void shooterIntro(){ //gameState 30
 			placeMenuImage(shooterPre01);
 		} else if (animationScreen == 1) {
 			placeMenuImage(shooterPre02);
-		} 
-		// else if (animationScreen == 2) {
-		// 	placeMenuImage(shooterPre03);
-		// } else if (animationScreen == 3) {
-		// 	placeMenuImage(shooterPre04);
-		// } 
-		else {
+		} else {
 			animationScreen = 0;
 		}
+
+		textSize(26);
+		fill(255);
+		textAlign(CENTER,CENTER);
+		text("Press button to continue", width*4/5, height*3/4);
+
 	} else if (scene == 2) {
 		placeMenuImage(shooterPre05);
 	} else {

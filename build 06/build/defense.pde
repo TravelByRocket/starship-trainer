@@ -45,24 +45,25 @@ void defenseIntro(){ //gameState 20
 		placeMenuImage(defensePre00);
 		animationScreen = 0;
 	} else if (scene == 1) {
-		if (frameCount % 50 == 0){
-			animationScreen++;
-		}
-		if (animationScreen == 0){
-			placeMenuImage(defensePre01);
-		} else if (animationScreen == 1) {
-			placeMenuImage(defensePre02);
-		} else if (animationScreen == 2) {
-			placeMenuImage(defensePre04);
-		} else if (animationScreen == 3) {
-			placeMenuImage(defensePre05);
-		} else if (animationScreen == 4) {
-			placeMenuImage(defensePre06);
-		} else if (animationScreen == 5) {
-			placeMenuImage(defensePre07);
-		} else {
-			animationScreen = 0;
-		}
+		// if (frameCount % 50 == 0){
+		// 	animationScreen++;
+		// }
+		// if (animationScreen == 0){
+		// 	placeMenuImage(defensePre01);
+		// } else if (animationScreen == 1) {
+		// 	placeMenuImage(defensePre02);
+		// } else if (animationScreen == 2) {
+		// 	placeMenuImage(defensePre04);
+		// } else if (animationScreen == 3) {
+		// 	placeMenuImage(defensePre05);
+		// } else if (animationScreen == 4) {
+		// 	placeMenuImage(defensePre06);
+		// } else if (animationScreen == 5) {
+		// 	placeMenuImage(defensePre07);
+		// } else {
+		// 	animationScreen = 0;
+		// }
+		scene++;
 	} else if (scene == 2) {
 		placeMenuImage(defensePre08);
 	} else {
@@ -184,7 +185,7 @@ void leapOnCircleGesture(CircleGesture g, int leapState){
 			if (finger.getId()%10 == 1){
 				PVector positionCenter = g.getCenter();
 				float progress = g.getProgress();
-				if (progress > 0.99){
+				if (progress > 0.80){
 					blasts.add(new Blast(mapLeapX(positionCenter.x),mapLeapY(positionCenter.y)));
 				} else {
 					progresses.add(new ProgressMessage(round(progress*100),mapLeapX(positionCenter.x),mapLeapY(positionCenter.y)));
@@ -431,8 +432,8 @@ void loadDefenseImages(){
 	statusPlanet04 = requestImage("../../data/lifeStatus/statusPlanet04.png");
 	statusPlanet03 = requestImage("../../data/lifeStatus/statusPlanet03.png");
 	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet02.png");
-	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet01.png");
-	statusPlanet02 = requestImage("../../data/lifeStatus/statusPlanet00.png");
+	statusPlanet01 = requestImage("../../data/lifeStatus/statusPlanet01.png");
+	statusPlanet00 = requestImage("../../data/lifeStatus/statusPlanet00.png");
 }
 
 void drawHealthBarPlanet(int theHealth){
